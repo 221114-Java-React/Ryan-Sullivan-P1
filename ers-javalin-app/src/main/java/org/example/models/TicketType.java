@@ -1,6 +1,6 @@
 package org.example.models;
 
-public class ReimbursementType {
+public class TicketType {
     String id;
     String type;
 }

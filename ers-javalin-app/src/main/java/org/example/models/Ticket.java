@@ -2,7 +2,7 @@ package org.example.models;
 
 import java.time.LocalDateTime;
 
-public class Reimbursement {
+public class Ticket {
     String reimbursementId;
     double amount;
     LocalDateTime submitted;

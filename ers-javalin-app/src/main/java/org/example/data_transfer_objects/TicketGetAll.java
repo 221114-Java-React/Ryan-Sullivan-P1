@@ -1,4 +1,4 @@
 package org.example.data_transfer_objects;
 
-public class NewUserRequest {
+public class TicketGetAll {
 }

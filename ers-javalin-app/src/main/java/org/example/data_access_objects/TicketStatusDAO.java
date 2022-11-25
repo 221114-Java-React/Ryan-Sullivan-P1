@@ -1,4 +1,4 @@
 package org.example.data_access_objects;
 
-public class ReimbursementTypeDAO {
+public class TicketStatusDAO {
 }
