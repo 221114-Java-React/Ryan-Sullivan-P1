@@ -20,4 +20,12 @@ public class UserHandler {
         service.createUser(userNew);
         ctx.status(201);
     }
+
+    public void updateUser(Context ctx) {
+
+    }
+
+    public void deleteUser(Context ctx) {
+
+    }
 }

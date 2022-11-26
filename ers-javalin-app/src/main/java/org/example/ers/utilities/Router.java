@@ -1,40 +1,39 @@
 package org.example.ers.utilities;
 
 import io.javalin.Javalin;
+import org.example.ers.handlers.AuthHandler;
+import org.example.ers.handlers.TicketHandler;
 import org.example.ers.handlers.UserHandler;
-import org.example.ers.services.UserService;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Router {
     public static void registerRoutes(Javalin app) {
         UserHandler userHandler = new UserHandler();
+        AuthHandler authHandler = new AuthHandler();
+        TicketHandler ticketHandler = new TicketHandler();
 
         app.routes(() -> {
             path("/users", () -> {
-                post(ctx -> {
-                    userHandler.createUser(ctx);
-                }); // create user
-                put(ctx -> {}); // update user
-                delete(ctx -> {}); //delete user
+                post(userHandler::createUser); // create user
+                put(userHandler::updateUser); // update user
+                delete(userHandler::deleteUser); //delete user
             });
             path("/login", () -> {
-                post(ctx -> {});
+                post(authHandler::login);
             });
             path("/ticket", () -> {
                 // for managers
-                get(ctx -> {}); // get all tickets
-                get("/type", ctx -> {}); // filter by type
-                get("/status", ctx -> {}); // filter by status
-                patch("approve/{id}", ctx -> {}); // approve
-                patch("deny/{id}", ctx -> {}); // deny
+                get(ticketHandler::getAll); // get all tickets
+                get("/type", ticketHandler::getByType); // filter by type
+                get("/status", ticketHandler::getByStatus); // filter by status
+                patch("approve/{id}", ticketHandler::approve); // approve
+                patch("deny/{id}", ticketHandler::deny); // deny
 
-                // employee (can view own) or manager (can view details of any)
-                get("/details", ctx -> {}); // get ticket details
-
-                // for employees
-                get("/{username}", ctx -> {}); // get all "my" tickets
-                post(ctx -> {}); // submit new ticket
+                // employee (can view own) or manager (any)
+                get("/details", ticketHandler::getDetails); // get ticket details
+                get("/user/{username}", ticketHandler::getUsersTickets); // get all users submitted tickets
+                post(ticketHandler::submit); // submit new ticket
             });
         });
     }
