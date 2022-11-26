@@ -1,4 +1,4 @@
-package org.example.models;
+package org.example.ers.models;
 
 public class TicketType {
     String id;

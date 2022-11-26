@@ -1,14 +1,19 @@
-package org.example.utilities;
+package org.example.ers.utilities;
 
 import io.javalin.Javalin;
+import org.example.ers.handlers.UserHandler;
+import org.example.ers.services.UserService;
+
 import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Router {
     public static void registerRoutes(Javalin app) {
+        UserHandler userHandler = new UserHandler();
+
         app.routes(() -> {
             path("/users", () -> {
                 post(ctx -> {
-                    System.out.println("POST /users");
+                    userHandler.createUser(ctx);
                 }); // create user
                 put(ctx -> {}); // update user
                 delete(ctx -> {}); //delete user
