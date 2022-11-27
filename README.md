@@ -1,6 +1,39 @@
-# Java Enterprise Foundations Project Requirements
+# Java Enterprise Foundations Project
 
-## Project Description
+## Contents
+- [Java Enterprise Foundations Project](#java-enterprise-foundations-project)
+  - [Contents](#contents)
+  - [How to setup for development](#how-to-setup-for-development)
+  - [Java Enterprise Foundations Project Requirements](#java-enterprise-foundations-project-requirements)
+    - [Project Description](#project-description)
+    - [Project Design Specifications and Documents](#project-design-specifications-and-documents)
+        - [Relational Data Model](#relational-data-model)
+        - [Reimbursement Types](#reimbursement-types)
+        - [System Use Case Diagrams](#system-use-case-diagrams)
+        - [Reimbursment Status State Flow](#reimbursment-status-state-flow)
+    - [Technologies](#technologies)
+    - [Functional Requirements](#functional-requirements)
+    - [Non-Functional Requirements](#non-functional-requirements)
+    - [Suggested Bonus Features](#suggested-bonus-features)
+  - [Scoring and Milestones](#scoring-and-milestones)
+    - [Technical Scoring Rubric](#technical-scoring-rubric)
+    - [Soft Skill Scoring Rubric](#soft-skill-scoring-rubric)
+    - [Developer Scoring Rubric](#developer-scoring-rubric)
+  - [Milestones](#milestones)
+      - [02Dec2022](#02dec2022)
+
+
+## How to setup for development
+
+- Start a postgres database you want to use for testing and run `create_tables_ddl.sql` then `initial_setup_dml.sql` in `scripts` folder
+- Create a `resources` directory and a `db.properties` file under `ers-javalin-app`.
+- Add properties for `url`, `username`, and `password`
+- Run `MainDriver::main` in `ers-javalin-app/src/main/java/org/example/ers/MainDriver.java`
+
+
+## Java Enterprise Foundations Project Requirements
+
+### Project Description
 
 For the foundations module of your training you are tasked with building an API that will support a new internal expense reimbursement system. This system will manage the process of reimbursing employees for expenses incurred while on company time. All registered employees in the company can login and submit requests for reimbursement and view their past tickets and pending requests. Finance managers can log in and view all reimbursement requests and past history for all employees in the company. Finance managers are authorized to approve and deny requests for expense reimbursement.
 
