@@ -56,7 +56,7 @@ public class UserDAO implements DAO<User> {
     }
 
     @Override
-    public List findAll() {
+    public List<User> findAll() {
         return null;
     }
 
