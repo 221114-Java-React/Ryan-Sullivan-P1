@@ -19,9 +19,8 @@ public class Router {
                 put(userHandler::updateUser); // update user
                 delete(userHandler::deleteUser); //delete user
             });
-            path("/login", () -> {
-                post(authHandler::login);
-            });
+            path("/login", () -> post(authHandler::login));
+
             path("/ticket", () -> {
                 // for managers
                 get(ticketHandler::getAll); // get all tickets

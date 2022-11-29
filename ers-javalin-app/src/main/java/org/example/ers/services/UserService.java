@@ -14,7 +14,7 @@ public class UserService {
     public UserService() {
         this.userDAO = new UserDAO();
     }
-    public void createUser(UserNew req) {
+    public String createUser(UserNew req) {
         String id = UUID.randomUUID().toString();
         User newUser = new User(id,
                             req.getUsername(),
@@ -27,7 +27,10 @@ public class UserService {
             this.userDAO.create(newUser);
         } catch (Exception e) {
             // need to set response to a 400 style with reason why.
+            System.out.println(e.toString());
+            System.out.println("invalid user");
         }
+        return "success";
     }
 
     private void validateNewUser(User newUser) throws Exception {

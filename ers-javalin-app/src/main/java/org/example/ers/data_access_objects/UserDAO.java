@@ -12,7 +12,8 @@ public class UserDAO implements DAO<User> {
     public void create(User user) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
             /* always start with the PrepareStatement */
-            String dml = "INSERT INTO users (user_id, username, email, password, given_name, surname) VALUES (?, ?, ?, ?, ?, ?)";
+            String dml = "INSERT INTO users (user_id, username, email, password, given_name, surname, role_id) ";
+            dml = dml + "VALUES (?, ?, ?, ?, ?, ?, 3)";
             PreparedStatement ps = con.prepareStatement(dml);
             ps.setString(1, user.getUserId());
             ps.setString(2, user.getUsername());
@@ -41,7 +42,7 @@ public class UserDAO implements DAO<User> {
                 String username = resultSet.getString("username");
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("password");
-                String givenName = resultSet.getString("giveName");
+                String givenName = resultSet.getString("givenName");
                 String surname = resultSet.getString("surname");
                 boolean isActive = resultSet.getBoolean("isActive");
                 String roleId = resultSet.getString("roleId");
@@ -68,10 +69,10 @@ public class UserDAO implements DAO<User> {
                 String username = resultSet.getString("username");
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("password");
-                String givenName = resultSet.getString("giveName");
+                String givenName = resultSet.getString("given_name");
                 String surname = resultSet.getString("surname");
-                boolean isActive = resultSet.getBoolean("isActive");
-                String roleId = resultSet.getString("roleId");
+                boolean isActive = resultSet.getBoolean("is_active");
+                String roleId = resultSet.getString("role_id");
                 User user = new User(userId, username, email, password, givenName, surname, isActive, roleId);
                 userList.add(user);
             }
