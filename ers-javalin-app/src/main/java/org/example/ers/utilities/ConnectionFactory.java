@@ -37,7 +37,6 @@ public class ConnectionFactory {
     }
 
     public Connection getConnection() {
-        System.out.println("getting connection");
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(properties.getProperty("url"),

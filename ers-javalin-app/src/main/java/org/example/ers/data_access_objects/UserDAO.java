@@ -57,6 +57,31 @@ public class UserDAO implements DAO<User> {
 
     @Override
     public List<User> findAll() {
+        List<User> userList = new ArrayList<>();
+        Connection connection = ConnectionFactory.getInstance().getConnection();
+        String query = "SELECT * from users";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                String userId = resultSet.getString("user_id");
+                String username = resultSet.getString("username");
+                String email = resultSet.getString("email");
+                String password = resultSet.getString("password");
+                String givenName = resultSet.getString("giveName");
+                String surname = resultSet.getString("surname");
+                boolean isActive = resultSet.getBoolean("isActive");
+                String roleId = resultSet.getString("roleId");
+                User user = new User(userId, username, email, password, givenName, surname, isActive, roleId);
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return userList;
+    }
+
+    public List<String> findAllUsernames() {
         return null;
     }
 
