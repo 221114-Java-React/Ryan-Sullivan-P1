@@ -19,6 +19,7 @@ public class UserService {
     public UserService() {
         this.userDAO = new UserDAO();
     }
+
     public void createUser(UserNew req) throws InvalidUserFieldsException {
         validateNewUserRequest(req);
         String newId = UUID.randomUUID().toString();
@@ -37,6 +38,8 @@ public class UserService {
         if (validUser == null) throw new InvalidCredentialsException("invalid username or password");
         return new Principal(validUser.getUserId(), validUser.getUsername(), validUser.getRole());
     }
+
+     // private validation methods and helpers
 
     private void validateNewUserRequest(UserNew req) throws InvalidUserFieldsException {
         if (validUsername(req.getUsername())) throw new InvalidUserFieldsException("bad or missing username");

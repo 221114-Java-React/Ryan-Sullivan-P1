@@ -14,7 +14,7 @@ public class AccessConfiguration {
         TokenService tokenService = new TokenService(jwtConfig);
 
         Principal principal = tokenService.extractUserDetailsFromContext(context);
-        if (principal != null)context.attribute("principal", principal);
+        context.attribute("principal", principal);
 
         if (routeRoles.isEmpty() || routeRoles.contains(principal.getRole())) {
             handler.handle(context);
