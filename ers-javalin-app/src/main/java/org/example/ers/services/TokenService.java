@@ -45,6 +45,18 @@ public class TokenService {
         return new Principal(claims.getId(), claims.getSubject(), UserRole.valueOf(claims.get("role", String.class)));
     }
 
+    public Principal extractUserDetailsFromContext(Context ctx) {
+        String token = ctx.req.getHeader("authorization");
+
+        if (token == null || token.isEmpty()) {
+            return null;
+        }
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtConfig.getSigningKey())
+                .parseClaimsJws(token)
+                .getBody();
+        return new Principal(claims.getId(), claims.getSubject(), UserRole.valueOf(claims.get("role", String.class)));
+    }
     public UserRole extractRoleFromContext(Context ctx) {
         String token = ctx.req.getHeader("authorization");
 
