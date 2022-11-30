@@ -8,9 +8,8 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import org.example.ers.data_transfer_objects.responses.Principal;
 import org.example.ers.utilities.JwtConfig;
-import org.example.ers.utilities.enums.UserRole;
+import org.example.ers.models.UserRole;
 
-import javax.management.relation.Role;
 import java.util.Date;
 
 public class TokenService {

@@ -5,7 +5,6 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.example.ers.data_transfer_objects.responses.Principal;
 import org.example.ers.services.TokenService;
-import org.example.ers.utilities.enums.UserRole;
 
 import java.util.Set;
 

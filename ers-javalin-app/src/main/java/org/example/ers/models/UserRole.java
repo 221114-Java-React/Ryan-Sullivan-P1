@@ -1,4 +1,4 @@
-package org.example.ers.utilities.enums;
+package org.example.ers.models;
 
 import io.javalin.core.security.RouteRole;
 

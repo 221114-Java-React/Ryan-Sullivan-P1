@@ -1,6 +1,6 @@
 package org.example.ers.data_transfer_objects.responses;
 
-import org.example.ers.utilities.enums.UserRole;
+import org.example.ers.models.UserRole;
 
 public class Principal {
     private String id;

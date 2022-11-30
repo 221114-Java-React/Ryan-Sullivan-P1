@@ -1,12 +1,8 @@
 package org.example.ers;
 import io.javalin.Javalin;
 
-import org.example.ers.data_transfer_objects.responses.Principal;
-import org.example.ers.services.TokenService;
 import org.example.ers.utilities.AccessConfiguration;
-import org.example.ers.utilities.JwtConfig;
 import org.example.ers.utilities.Router;
-import org.example.ers.utilities.enums.UserRole;
 
 /**
  * Hello world!

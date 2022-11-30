@@ -2,7 +2,7 @@ package org.example.ers.data_access_objects;
 
 import org.example.ers.models.User;
 import org.example.ers.utilities.ConnectionFactory;
-import org.example.ers.utilities.enums.UserRole;
+import org.example.ers.models.UserRole;
 
 import java.util.ArrayList;
 import java.util.List;

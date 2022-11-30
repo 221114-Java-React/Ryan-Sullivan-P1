@@ -7,10 +7,8 @@ import org.example.ers.handlers.TicketHandler;
 import org.example.ers.handlers.UserHandler;
 import org.example.ers.services.TokenService;
 import org.example.ers.services.UserService;
-import org.example.ers.utilities.enums.UserRole;
+import org.example.ers.models.UserRole;
 
-
-import javax.management.relation.Role;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 

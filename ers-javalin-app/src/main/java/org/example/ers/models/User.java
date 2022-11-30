@@ -1,7 +1,5 @@
 package org.example.ers.models;
 
-import org.example.ers.utilities.enums.UserRole;
-
 public class User {
     private String userId;
     private String username;
