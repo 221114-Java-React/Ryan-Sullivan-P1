@@ -5,6 +5,7 @@ import org.example.ers.data_transfer_objects.requests.LoginRequest;
 import org.example.ers.data_transfer_objects.requests.UserNew;
 import org.example.ers.models.Principal;
 import org.example.ers.models.User;
+import org.example.ers.models.UserRole;
 import org.example.ers.utilities.custom_exceptions.InvalidCredentialsException;
 import org.example.ers.utilities.custom_exceptions.InvalidUserFieldsException;
 
@@ -26,7 +27,9 @@ public class UserService {
                             req.getEmail(),
                             req.getPassword(),
                             req.getGivenName(),
-                            req.getSurname());
+                            req.getSurname(),
+                            false,
+                            UserRole.EMPLOYEE);
 
         this.userDAO.create(newUser);
     }
