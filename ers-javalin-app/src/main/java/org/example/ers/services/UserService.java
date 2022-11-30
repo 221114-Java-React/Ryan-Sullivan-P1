@@ -3,13 +3,11 @@ package org.example.ers.services;
 import org.example.ers.data_access_objects.UserDAO;
 import org.example.ers.data_transfer_objects.requests.LoginRequest;
 import org.example.ers.data_transfer_objects.requests.UserNew;
-import org.example.ers.data_transfer_objects.responses.Principal;
+import org.example.ers.models.Principal;
 import org.example.ers.models.User;
 import org.example.ers.utilities.custom_exceptions.InvalidCredentialsException;
 import org.example.ers.utilities.custom_exceptions.InvalidUserFieldsException;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 public class UserService {

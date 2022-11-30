@@ -1,4 +1,4 @@
-package org.example.ers.data_transfer_objects.responses;
+package org.example.ers.models;
 
 import org.example.ers.models.UserRole;
 

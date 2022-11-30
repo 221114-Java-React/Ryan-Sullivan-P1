@@ -3,7 +3,7 @@ package org.example.ers.handlers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import org.example.ers.data_transfer_objects.requests.LoginRequest;
-import org.example.ers.data_transfer_objects.responses.Principal;
+import org.example.ers.models.Principal;
 import org.example.ers.services.TokenService;
 import org.example.ers.services.UserService;
 import org.example.ers.utilities.custom_exceptions.InvalidCredentialsException;
