@@ -1,15 +1,16 @@
 package org.example.ers.services;
 
+import io.javalin.http.Context;
 // mostly unchanged from trainer-p1
 // not much reason to deviate
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import org.example.ers.data_transfer_objects.responses.Principal;
-import org.example.ers.models.UserRole;
 import org.example.ers.utilities.JwtConfig;
+import org.example.ers.utilities.enums.UserRole;
 
-
+import javax.management.relation.Role;
 import java.util.Date;
 
 public class TokenService {
@@ -30,7 +31,7 @@ public class TokenService {
                 .setIssuedAt(issueTime)
                 .setExpiration(expirationTime)
                 .setSubject(principal.getUsername())
-                .claim("role", "default")
+                .claim("role", principal.getRole())
                 .signWith(jwtConfig.getSigAlg(), jwtConfig.getSigningKey());
 
         return jwtBuilder.compact();
@@ -41,8 +42,22 @@ public class TokenService {
                 .setSigningKey(jwtConfig.getSigningKey())
                 .parseClaimsJws(token)
                 .getBody();
-        Principal principal = new Principal(claims.getId(),
-                                        claims.getSubject());
-        return principal;
+        return new Principal(claims.getId(), claims.getSubject(), UserRole.valueOf(claims.get("role", String.class)));
+    }
+
+    public UserRole extractRoleFromContext(Context ctx) {
+        String token = ctx.req.getHeader("authorization");
+
+        if (token == null || token.isEmpty()) {
+            return UserRole.EMPLOYEE;
+        }
+
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtConfig.getSigningKey())
+                .parseClaimsJws(token)
+                .getBody();
+
+        System.out.println(claims.get("role"));
+        return UserRole.valueOf(claims.get("role", String.class));
     }
 }

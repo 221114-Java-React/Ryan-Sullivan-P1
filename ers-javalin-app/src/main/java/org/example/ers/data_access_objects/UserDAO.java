@@ -2,6 +2,7 @@ package org.example.ers.data_access_objects;
 
 import org.example.ers.models.User;
 import org.example.ers.utilities.ConnectionFactory;
+import org.example.ers.utilities.enums.UserRole;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +50,8 @@ public class UserDAO implements DAO<User> {
                 String givenName = resultSet.getString("given_name");
                 String surname = resultSet.getString("surname");
                 boolean isActive = resultSet.getBoolean("is_active");
-                String roleId = resultSet.getString("role_id");
-                user = new User(userId, username, email, password, givenName, surname, isActive, roleId);
+                UserRole role = UserRole.valueOf(resultSet.getString("user_role"));
+                user = new User(userId, username, email, password, givenName, surname, isActive, role);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,8 +76,8 @@ public class UserDAO implements DAO<User> {
                 String givenName = resultSet.getString("given_name");
                 String surname = resultSet.getString("surname");
                 boolean isActive = resultSet.getBoolean("is_active");
-                String roleId = resultSet.getString("role_id");
-                User user = new User(userId, username, email, password, givenName, surname, isActive, roleId);
+                UserRole role = UserRole.valueOf(resultSet.getString("user_role"));
+                User user = new User(userId, username, email, password, givenName, surname, isActive, role);
                 userList.add(user);
             }
         } catch (SQLException e) {

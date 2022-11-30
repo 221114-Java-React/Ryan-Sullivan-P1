@@ -6,7 +6,6 @@ import org.example.ers.data_transfer_objects.requests.UserNew;
 import org.example.ers.data_transfer_objects.responses.Principal;
 import org.example.ers.models.User;
 import org.example.ers.utilities.custom_exceptions.InvalidCredentialsException;
-import org.omg.CORBA.DynAnyPackage.Invalid;
 
 import java.util.List;
 import java.util.Objects;
@@ -43,10 +42,12 @@ public class UserService {
         if (validUser == null) {
             throw new RuntimeException("invalid username");
         }
+        System.out.println(validUser.getPassword());
+        System.out.println(req.getPassword());
         if (!Objects.equals(validUser.getPassword(), req.getPassword())) {
             throw new RuntimeException("invalid password");
         }
-        return new Principal(validUser.getUserId(), validUser.getUsername());
+        return new Principal(validUser.getUserId(), validUser.getUsername(), validUser.getRole());
     }
 
     private void validateNewUser(User newUser) throws InvalidCredentialsException {

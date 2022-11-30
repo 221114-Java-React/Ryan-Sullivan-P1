@@ -1,5 +1,7 @@
 package org.example.ers.models;
 
+import org.example.ers.utilities.enums.UserRole;
+
 public class User {
     private String userId;
     private String username;
@@ -8,7 +10,7 @@ public class User {
     private String givenName;
     private String surname;
     private boolean isActive;
-    private String roleId;
+    private UserRole role;
 
     public User(String id, String username, String email, String password, String givenName, String surname) {
         this.userId = id;
@@ -26,7 +28,7 @@ public class User {
                 String givenName,
                 String surname,
                 boolean isActive,
-                String roleId)
+                UserRole role)
     {
         this.userId = userId;
         this.username = username;
@@ -35,7 +37,7 @@ public class User {
         this.givenName = givenName;
         this.surname = surname;
         this.isActive = isActive;
-        this.roleId = roleId;
+        this.role = role;
     }
 
     public String getUserId() {
@@ -94,11 +96,8 @@ public class User {
         isActive = active;
     }
 
-    public String getRoleId() {
-        return roleId;
+    public UserRole getRole() {
+        return role;
     }
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
-    }
 }
