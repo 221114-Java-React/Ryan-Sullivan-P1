@@ -6,6 +6,7 @@ import org.example.ers.data_transfer_objects.requests.LoginRequest;
 import org.example.ers.data_transfer_objects.responses.Principal;
 import org.example.ers.services.TokenService;
 import org.example.ers.services.UserService;
+import org.example.ers.utilities.custom_exceptions.InvalidCredentialsException;
 
 import java.io.IOException;
 
@@ -21,14 +22,13 @@ public class AuthHandler {
     }
 
     public void login(Context ctx) throws IOException {
-        System.out.println("logging in a user");
         LoginRequest req = mapper.readValue(ctx.req.getInputStream(), LoginRequest.class);
-
-        Principal userPrincipal = userService.login(req);
-
-        String token = tokenService.generateToken(userPrincipal);
-        ctx.res.setHeader("authorization", token);
-        ctx.json(userPrincipal);
-        ctx.status(202);
+        try {
+            Principal userPrincipal = userService.login(req);
+            ctx.json(tokenService.generateToken(userPrincipal));
+            ctx.status(202);
+        } catch (InvalidCredentialsException e) {
+            ctx.status(401).result(e.getMessage());
+        }
     }
 }

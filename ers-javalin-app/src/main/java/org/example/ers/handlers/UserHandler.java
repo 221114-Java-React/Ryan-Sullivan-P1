@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import org.example.ers.data_transfer_objects.requests.UserNew;
 import org.example.ers.services.UserService;
+import org.example.ers.utilities.custom_exceptions.InvalidUserFieldsException;
 
 import java.io.IOException;
 
@@ -18,8 +19,12 @@ public class UserHandler {
     public void createUser(Context ctx) throws IOException {
         UserNew userNew = mapper.readValue(ctx.req.getInputStream(), UserNew.class);
 
-        userService.createUser(userNew);
-        ctx.status(201);
+        try {
+            userService.createUser(userNew);
+            ctx.status(201);
+        } catch (InvalidUserFieldsException e) {
+            ctx.status(400).result(e.getMessage());
+        }
     }
 
     public void updateUser(Context ctx) {

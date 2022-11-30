@@ -13,8 +13,8 @@ public class UserDAO implements DAO<User> {
     public void create(User user) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
             /* always start with the PrepareStatement */
-            String dml = "INSERT INTO users (user_id, username, email, password, given_name, surname, role_id) ";
-            dml = dml + "VALUES (?, ?, ?, ?, ?, ?, 3)";
+            String dml = "INSERT INTO users (user_id, username, email, password, given_name, surname, user_role) ";
+            dml = dml + "VALUES (?, ?, ?, ?, ?, ?, ?::user_role)";
             PreparedStatement ps = con.prepareStatement(dml);
             ps.setString(1, user.getUserId());
             ps.setString(2, user.getUsername());
@@ -22,6 +22,7 @@ public class UserDAO implements DAO<User> {
             ps.setString(4, String.valueOf(user.getPassword()));
             ps.setString(5, String.valueOf(user.getGivenName()));
             ps.setString(6, String.valueOf(user.getSurname()));
+            ps.setString(7, String.valueOf(UserRole.EMPLOYEE));
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -34,23 +35,23 @@ public class UserDAO implements DAO<User> {
     }
 
 
-    public User findByUsername(String username) {
+    public User findByUsernameAndPassword(String username, String password) {
         User user = null;
-        Connection connection = ConnectionFactory.getInstance().getConnection();
-        String query = "SELECT * from users WHERE username = ?";
 
-        try {
+        try (Connection connection = ConnectionFactory.getInstance().getConnection()){
+            String query = "SELECT * from users WHERE username = ? AND password = ?";
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, username);
+            ps.setString(2, password);
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.next()) {
                 String userId = resultSet.getString("user_id");
                 String email = resultSet.getString("email");
-                String password = resultSet.getString("password");
                 String givenName = resultSet.getString("given_name");
                 String surname = resultSet.getString("surname");
                 boolean isActive = resultSet.getBoolean("is_active");
                 UserRole role = UserRole.valueOf(resultSet.getString("user_role"));
+
                 user = new User(userId, username, email, password, givenName, surname, isActive, role);
             }
         } catch (SQLException e) {
@@ -60,12 +61,41 @@ public class UserDAO implements DAO<User> {
         return user;
     }
 
+    public boolean usernameTaken(String username) {
+        ResultSet resultSet;
+        try(Connection connection = ConnectionFactory.getInstance().getConnection()) {
+            String query = "SELECT username from users WHERE username = ?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, username);
+            resultSet = ps.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return true;
+    }
+    public boolean emailTaken(String email) {
+        ResultSet resultSet;
+        try(Connection connection = ConnectionFactory.getInstance().getConnection()) {
+            String query = "SELECT email from users WHERE email = ?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, email);
+            resultSet = ps.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return true;
+    }
+
     @Override
     public List<User> findAll() {
         List<User> userList = new ArrayList<>();
-        Connection connection = ConnectionFactory.getInstance().getConnection();
-        String query = "SELECT * from users";
-        try {
+
+        try (Connection connection = ConnectionFactory.getInstance().getConnection()) {
+            String query = "SELECT * from users";
             PreparedStatement ps = connection.prepareStatement(query);
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.next()) {
@@ -83,12 +113,10 @@ public class UserDAO implements DAO<User> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
         return userList;
     }
 
-    public List<String> findAllUsernames() {
-        return null;
-    }
 
     @Override
     public void update(User obj) {

@@ -7,6 +7,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import org.example.ers.data_transfer_objects.responses.Principal;
+import org.example.ers.data_transfer_objects.responses.Token;
 import org.example.ers.utilities.JwtConfig;
 import org.example.ers.models.UserRole;
 
@@ -19,7 +20,7 @@ public class TokenService {
         this.jwtConfig = jwtConfig;
     }
 
-    public String generateToken(Principal principal) {
+    public Token generateToken(Principal principal) {
         long now = System.currentTimeMillis();
         long expiration = now + jwtConfig.getValidForTime();
         Date issueTime = new Date(now);
@@ -33,7 +34,7 @@ public class TokenService {
                 .claim("role", principal.getRole())
                 .signWith(jwtConfig.getSigAlg(), jwtConfig.getSigningKey());
 
-        return jwtBuilder.compact();
+        return new Token(jwtBuilder.compact());
     }
 
     public Principal extractRequesterDetails(String token) {
