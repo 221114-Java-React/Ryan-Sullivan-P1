@@ -2,14 +2,11 @@ DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS tickets CASCADE;
 DROP TABLE IF EXISTS ticket_statuses CASCADE;
 DROP TABLE IF EXISTS ticket_types CASCADE;
-DROP TABLE IF EXISTS user_roles CASCADE;
+DROP TABLE IF EXISTS user_role cascade;
 
 
-CREATE TABLE user_roles (
-	role_id VARCHAR PRIMARY KEY,
-	role_text VARCHAR UNIQUE
-);
 
+CREATE TYPE user_role AS ENUM ('ADMIN', 'MANAGER', 'EMPLOYEE');
 
 CREATE TABLE users (
 	user_id VARCHAR PRIMARY KEY,
@@ -18,8 +15,8 @@ CREATE TABLE users (
 	password VARCHAR NOT NULL,
 	given_name VARCHAR NOT NULL,
 	surname VARCHAR NOT NULL,
-	is_active BOOLEAN,
-	role_id VARCHAR REFERENCES user_roles(role_id)
+	is_active BOOLEAN DEFAULT false,
+	user_role user_role DEFAULT 'EMPLOYEE'
 );
 
 CREATE TABLE ticket_statuses (
