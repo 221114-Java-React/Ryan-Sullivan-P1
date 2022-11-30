@@ -27,33 +27,36 @@ public class UserDAO implements DAO<User> {
         }
     }
 
-
     @Override
-    public List<User> findById(String id) {
-        List<User> userList = new ArrayList<>();
+    public User findById(String id) {
+        return null;
+    }
+
+
+    public User findByUsername(String username) {
+        User user = null;
         Connection connection = ConnectionFactory.getInstance().getConnection();
-        String query = "SELECT * from users WHERE id = ?";
+        String query = "SELECT * from users WHERE username = ?";
 
         try {
             PreparedStatement ps = connection.prepareStatement(query);
-            ps.setString(1, id);
+            ps.setString(1, username);
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.next()) {
-                String username = resultSet.getString("username");
+                String userId = resultSet.getString("user_id");
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("password");
-                String givenName = resultSet.getString("givenName");
+                String givenName = resultSet.getString("given_name");
                 String surname = resultSet.getString("surname");
-                boolean isActive = resultSet.getBoolean("isActive");
-                String roleId = resultSet.getString("roleId");
-                User user = new User(id, username, email, password, givenName, surname, isActive, roleId);
-                userList.add(user);
+                boolean isActive = resultSet.getBoolean("is_active");
+                String roleId = resultSet.getString("role_id");
+                user = new User(userId, username, email, password, givenName, surname, isActive, roleId);
             }
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
         }
-        return userList;
+        return user;
     }
 
     @Override

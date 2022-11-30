@@ -1,10 +1,15 @@
 package org.example.ers.services;
 
 import org.example.ers.data_access_objects.UserDAO;
+import org.example.ers.data_transfer_objects.requests.LoginRequest;
 import org.example.ers.data_transfer_objects.requests.UserNew;
+import org.example.ers.data_transfer_objects.responses.Principal;
 import org.example.ers.models.User;
+import org.example.ers.utilities.custom_exceptions.InvalidCredentialsException;
+import org.omg.CORBA.DynAnyPackage.Invalid;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class UserService {
@@ -33,15 +38,26 @@ public class UserService {
         return "success";
     }
 
-    private void validateNewUser(User newUser) throws Exception {
+    public Principal login(LoginRequest req) {
+        User validUser = userDAO.findByUsername(req.getUsername());
+        if (validUser == null) {
+            throw new RuntimeException("invalid username");
+        }
+        if (!Objects.equals(validUser.getPassword(), req.getPassword())) {
+            throw new RuntimeException("invalid password");
+        }
+        return new Principal(validUser.getUserId(), validUser.getUsername());
+    }
+
+    private void validateNewUser(User newUser) throws InvalidCredentialsException {
         // test for uniqueness
         List<User> allUsers = this.userDAO.findAll();
         for (User curr : allUsers) {
             if (curr.getUsername() == newUser.getUsername()) {
-                throw new Exception("username taken");
+                throw new InvalidCredentialsException("username taken");
             }
             if (curr.getEmail() == newUser.getEmail()) {
-                throw new Exception("email taken");
+                throw new InvalidCredentialsException("email taken");
             }
         }
     }

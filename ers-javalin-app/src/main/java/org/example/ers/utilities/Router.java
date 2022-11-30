@@ -1,16 +1,26 @@
 package org.example.ers.utilities;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.HeaderTokenizer;
 import io.javalin.Javalin;
+import jdk.nashorn.internal.parser.Token;
 import org.example.ers.handlers.AuthHandler;
 import org.example.ers.handlers.TicketHandler;
 import org.example.ers.handlers.UserHandler;
+import org.example.ers.services.TokenService;
+import org.example.ers.services.UserService;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Router {
     public static void registerRoutes(Javalin app) {
-        UserHandler userHandler = new UserHandler();
-        AuthHandler authHandler = new AuthHandler();
+        UserService userService = new UserService();
+        TokenService tokenService = new TokenService(new JwtConfig());
+        ObjectMapper objectMapper = new ObjectMapper();
+
+
+        UserHandler userHandler = new UserHandler(userService, objectMapper);
+        AuthHandler authHandler = new AuthHandler(userService, tokenService, objectMapper);
         TicketHandler ticketHandler = new TicketHandler();
 
         app.routes(() -> {

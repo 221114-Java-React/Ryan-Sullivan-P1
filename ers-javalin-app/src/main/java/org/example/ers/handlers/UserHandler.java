@@ -10,7 +10,8 @@ import java.io.IOException;
 public class UserHandler {
     private final ObjectMapper mapper;
     private final UserService service;
-    public UserHandler() {
+
+    public UserHandler(UserService userService, ObjectMapper objectMapper) {
         this.mapper = new ObjectMapper();
         this.service = new UserService();
     }
