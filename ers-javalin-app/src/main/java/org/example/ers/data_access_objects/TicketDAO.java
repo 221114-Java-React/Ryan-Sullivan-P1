@@ -1,12 +1,14 @@
 package org.example.ers.data_access_objects;
 
 import org.example.ers.models.Ticket;
+import org.example.ers.models.TicketStatus;
 import org.example.ers.utilities.ConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TicketDAO {
@@ -31,5 +33,39 @@ public class TicketDAO {
             logger.info("create ticket dml failed");
         }
         return ticketId;
+    }
+
+    public Ticket findById(String ticketId) {
+        Ticket ticket = null;
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            String dql = "SELECT ticket_id, status FROM tickets WHERE ticket_id = ?";
+            PreparedStatement ps = con.prepareStatement(dql);
+            ps.setString(1, ticketId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                TicketStatus status = TicketStatus.valueOf(rs.getString("status"));
+                ticket = new Ticket(ticketId, status);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            logger.info("sql exception with TicketDAO.findById()");
+        }
+        return ticket;
+    }
+
+    public void resolve(Ticket ticket) {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            String dml = "UPDATE tickets SET status = ?::ticket_status, resolver_id = ?, resolved = ? WHERE ticket_id = ?";
+            PreparedStatement ps = con.prepareStatement(dml);
+
+            ps.setString(1, String.valueOf(ticket.getStatus()));
+            ps.setString(2, ticket.getResolver());
+            ps.setTimestamp(3, ticket.getResolved());
+            ps.setString(4, ticket.getTicketId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            logger.info("sql exception resolving ticket");
+        }
     }
 }

@@ -30,7 +30,7 @@ public class AuthHandler {
                 ctx.json(tokenService.generateToken(userPrincipal));
                 ctx.status(202);
             } catch (InvalidCredentialsException e) {
-                ctx.status(401).result("unrecognized field");
+                ctx.status(401).result(e.getMessage());
             }
         } catch (UnrecognizedPropertyException e) {
             ctx.status(400).result(e.getMessage());

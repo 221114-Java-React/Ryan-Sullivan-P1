@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import org.example.ers.data_transfer_objects.requests.TicketNew;
 import org.example.ers.models.Principal;
+import org.example.ers.models.TicketStatus;
 import org.example.ers.services.TicketService;
+import org.example.ers.utilities.custom_exceptions.InvalidTicketRequestException;
 
 import java.io.IOException;
 
@@ -21,8 +23,25 @@ public class TicketHandler {
     public void submit(Context ctx) throws IOException {
         Principal principal = ctx.attribute("principal");
         TicketNew newTicketRequest = mapper.readValue(ctx.req.getInputStream(), TicketNew.class);
-        ticketService.createTicket(newTicketRequest, principal);
+        try {
+            ticketService.createTicket(newTicketRequest, principal);
+            ctx.status(201); // created
+        } catch (InvalidTicketRequestException e) {
+            ctx.status(400).result(e.getMessage());
+        }
     }
+
+    public void resolve(Context ctx, TicketStatus status) {
+        Principal principal = ctx.attribute("principal");
+        String ticketId = ctx.pathParam("id");
+        try {
+            ticketService.resolve(ticketId, principal, status);
+            ctx.status(202);
+        } catch (InvalidTicketRequestException e) {
+            ctx.status(409).result(e.getMessage());
+        }
+    }
+
     public void getAll(Context ctx) {
 
     }
@@ -36,14 +55,6 @@ public class TicketHandler {
     }
 
     public void getByStatus(Context ctx) {
-
-    }
-
-    public void approve(Context ctx) {
-
-    }
-
-    public void deny(Context ctx) {
 
     }
 

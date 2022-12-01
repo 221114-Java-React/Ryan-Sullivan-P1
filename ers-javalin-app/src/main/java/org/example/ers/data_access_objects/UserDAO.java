@@ -24,9 +24,9 @@ public class UserDAO implements DAO<User> {
             ps.setString(1, user.getUserId());
             ps.setString(2, user.getUsername());
             ps.setString(3, user.getEmail());
-            ps.setString(4, String.valueOf(user.getPassword()));
-            ps.setString(5, String.valueOf(user.getGivenName()));
-            ps.setString(6, String.valueOf(user.getSurname()));
+            ps.setString(4, user.getPassword());
+            ps.setString(5, user.getGivenName());
+            ps.setString(6, user.getSurname());
             ps.setString(7, String.valueOf(UserRole.EMPLOYEE));
             ps.executeUpdate();
             logger.info("new user created");

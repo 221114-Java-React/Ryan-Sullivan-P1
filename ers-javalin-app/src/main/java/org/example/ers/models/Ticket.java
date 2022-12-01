@@ -8,14 +8,19 @@ public class Ticket {
     String ticketId;
     double amount;
     Timestamp submitted;
-    LocalDateTime resolved;
+    Timestamp resolved;
     String description;
     String paymentId;
     String authorId;
     String resolver;
-    String statusId;
+    TicketStatus status;
     String typeId;
     SerialBlob receipt;
+
+    public Ticket(String ticketId, TicketStatus status) {
+        this.ticketId = ticketId;
+        this.status = status;
+    }
 
     public Ticket(String reimbursementId, double amount, Timestamp submitted, String description, String authorId) {
         this.ticketId = reimbursementId;
@@ -49,11 +54,11 @@ public class Ticket {
         this.submitted = submitted;
     }
 
-    public LocalDateTime getResolved() {
+    public Timestamp getResolved() {
         return resolved;
     }
 
-    public void setResolved(LocalDateTime resolved) {
+    public void setResolved(Timestamp resolved) {
         this.resolved = resolved;
     }
 
@@ -89,12 +94,12 @@ public class Ticket {
         this.resolver = resolver;
     }
 
-    public String getStatusId() {
-        return statusId;
+    public TicketStatus getStatus() {
+        return status;
     }
 
-    public void setStatusId(String statusId) {
-        this.statusId = statusId;
+    public void setStatus(TicketStatus status) {
+        this.status = status;
     }
 
     public String getTypeId() {
