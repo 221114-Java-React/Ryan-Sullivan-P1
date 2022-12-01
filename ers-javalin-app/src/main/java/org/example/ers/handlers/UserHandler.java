@@ -13,7 +13,7 @@ public class UserHandler {
     private final UserService userService;
 
     public UserHandler(UserService userService, ObjectMapper objectMapper) {
-        this.mapper = new ObjectMapper();
+        this.mapper = objectMapper;
         this.userService = userService;
     }
     public void createUser(Context ctx) throws IOException {

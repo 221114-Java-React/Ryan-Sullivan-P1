@@ -9,10 +9,12 @@ import org.example.ers.services.TokenService;
 import java.util.Set;
 
 public class AccessConfiguration {
-    public static void configure(Handler handler, Context context, Set<RouteRole> routeRoles) throws Exception {
-        JwtConfig jwtConfig = new JwtConfig();
-        TokenService tokenService = new TokenService(jwtConfig);
-
+    public static void configure(Handler handler,
+                                 Context context,
+                                 Set<RouteRole> routeRoles,
+                                 TokenService tokenService
+    ) throws Exception
+    {
         Principal principal = tokenService.extractUserDetailsFromContext(context);
         context.attribute("principal", principal);
 

@@ -3,12 +3,17 @@ package org.example.ers.data_access_objects;
 import org.example.ers.models.User;
 import org.example.ers.utilities.ConnectionFactory;
 import org.example.ers.models.UserRole;
+import org.slf4j.ILoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
 
 public class UserDAO implements DAO<User> {
+
+    private final static Logger logger = LoggerFactory.getLogger(UserDAO.class);
     @Override
     public void create(User user) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
@@ -24,8 +29,10 @@ public class UserDAO implements DAO<User> {
             ps.setString(6, String.valueOf(user.getSurname()));
             ps.setString(7, String.valueOf(UserRole.EMPLOYEE));
             ps.executeUpdate();
+            logger.info("new user created");
         } catch (SQLException e) {
             e.printStackTrace();
+            logger.info("create user dml failed");
         }
     }
 
@@ -56,7 +63,7 @@ public class UserDAO implements DAO<User> {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
+            logger.info("sql exception when querying for username and password", e);
         }
         return user;
     }
@@ -111,7 +118,8 @@ public class UserDAO implements DAO<User> {
                 userList.add(user);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            logger.info("query failure", e);
         }
 
         return userList;

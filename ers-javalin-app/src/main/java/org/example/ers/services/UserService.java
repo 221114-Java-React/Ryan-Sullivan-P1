@@ -6,10 +6,10 @@ import org.example.ers.data_transfer_objects.requests.UserNew;
 import org.example.ers.models.Principal;
 import org.example.ers.models.User;
 import org.example.ers.models.UserRole;
+import org.example.ers.utilities.UtilityMethods;
 import org.example.ers.utilities.custom_exceptions.InvalidCredentialsException;
 import org.example.ers.utilities.custom_exceptions.InvalidUserFieldsException;
 
-import java.util.UUID;
 
 public class UserService {
 
@@ -21,8 +21,7 @@ public class UserService {
 
     public void createUser(UserNew req) throws InvalidUserFieldsException {
         validateNewUserRequest(req);
-        String newId = UUID.randomUUID().toString();
-        User newUser = new User(newId,
+        User newUser = new User(UtilityMethods.generateId(),
                             req.getUsername(),
                             req.getEmail(),
                             req.getPassword(),
