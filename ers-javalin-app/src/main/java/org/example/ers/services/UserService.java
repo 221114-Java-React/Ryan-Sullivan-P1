@@ -1,7 +1,7 @@
 package org.example.ers.services;
 
 import org.example.ers.data_access_objects.UserDAO;
-import org.example.ers.data_access_objects.UserRoleDao;
+import org.example.ers.data_access_objects.UserRoleDAO;
 import org.example.ers.data_transfer_objects.requests.LoginRequest;
 import org.example.ers.data_transfer_objects.requests.NewUserRequest;
 import org.example.ers.models.Principal;
@@ -21,10 +21,10 @@ public class UserService {
     private final Properties properties;
 
     private final UserDAO userDAO;
-    private final UserRoleDao userRoleDAO;
+    private final UserRoleDAO userRoleDAO;
 
     public UserService() {
-        this.userRoleDAO = new UserRoleDao();
+        this.userRoleDAO = new UserRoleDAO();
         this.userDAO = new UserDAO();
         this.properties = new Properties();
     }
@@ -46,7 +46,7 @@ public class UserService {
     public Principal login(LoginRequest req) throws InvalidCredentialsException {
         User validUser = userDAO.findByUsernameAndPasswordHash(req.getUsername(), hashPasswordWithSalt(req.getPassword()));
         if (validUser == null) throw new InvalidCredentialsException("invalid username or password");
-        UserRoleDao roleDAO = new UserRoleDao();
+        UserRoleDAO roleDAO = new UserRoleDAO();
         String roleName = roleDAO.getApiNameFromId(validUser.getRoleId());
         return new Principal(validUser.getUserId(), RoleEnum.valueOf(roleName));
     }

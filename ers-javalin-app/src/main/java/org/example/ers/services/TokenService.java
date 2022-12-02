@@ -2,6 +2,7 @@ package org.example.ers.services;
 
 import io.javalin.http.Context;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import org.example.ers.models.Principal;
@@ -34,17 +35,16 @@ public class TokenService {
         return new Token(jwtBuilder.compact());
     }
 
-    public Principal extractUserDetailsFromContext(Context ctx) {
-        String token = ctx.req.getHeader("authorization");
+    public Principal extractUserDetailsFromToken(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(jwtConfig.getSigningKey())
+                    .parseClaimsJws(token)
+                    .getBody();
 
-        if (token == null || token.isEmpty()) {
+            return new Principal(claims.getId(), RoleEnum.valueOf(claims.get("role", String.class)));
+        } catch (ExpiredJwtException e) {
             return null;
         }
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtConfig.getSigningKey())
-                .parseClaimsJws(token)
-                .getBody();
-
-        return new Principal(claims.getId(), RoleEnum.valueOf(claims.get("role", String.class)));
     }
 }

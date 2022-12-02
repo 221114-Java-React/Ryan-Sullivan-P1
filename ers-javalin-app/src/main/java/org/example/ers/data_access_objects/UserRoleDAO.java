@@ -10,8 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserRoleDao {
-    private final static Logger logger = LoggerFactory.getLogger(UserRoleDao.class);
+public class UserRoleDAO {
+    private final static Logger logger = LoggerFactory.getLogger(UserRoleDAO.class);
 
     public String getApiNameFromId(String roleId) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {

@@ -6,10 +6,9 @@ import org.example.ers.utilities.ConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class TicketDAO {
     private final static Logger logger = LoggerFactory.getLogger(TicketDAO.class);
@@ -67,5 +66,27 @@ public class TicketDAO {
             e.printStackTrace();
             logger.info("sql exception resolving ticket");
         }
+    }
+
+    public List<Ticket> getPendingTickets() {
+        List<Ticket> tickets = new LinkedList<Ticket>();
+
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            String dql = "SELECT * FROM tickets WHERE status = ?::ticket_status";
+            PreparedStatement ps = con.prepareStatement(dql);
+            ps.setString(1, String.valueOf(TicketStatus.PENDING));
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                tickets.add(new Ticket(rs.getString("ticket_id"),
+                                        rs.getDouble("amount"),
+                                rs.getTimestamp("submitted"),
+                                rs.getString("description"),
+                                rs.getString("author_id")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            logger.info("sql exception with TicketDAO.findById()");
+        }
+        return tickets;
     }
 }

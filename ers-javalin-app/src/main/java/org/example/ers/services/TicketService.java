@@ -10,6 +10,7 @@ import org.example.ers.utilities.custom_exceptions.InvalidTicketRequestException
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class TicketService {
     private final TicketDAO ticketDAO;
@@ -28,17 +29,6 @@ public class TicketService {
         ticketDAO.create(newTicket);
     }
 
-    public void approve(String ticketId, Principal principal) throws InvalidTicketRequestException {
-        Ticket ticket = ticketDAO.findById(ticketId);
-        if (ticket.getStatus() != TicketStatus.PENDING) {
-            throw new InvalidTicketRequestException("ticket is already resolved");
-        }
-        ticket.setStatus(TicketStatus.APPROVED);
-        ticket.setResolver(principal.getId());
-        ticket.setResolved(new Timestamp(System.currentTimeMillis()));
-        ticketDAO.resolve(ticket);
-    }
-
     public void resolve(String ticketId, Principal principal, TicketStatus status) throws InvalidTicketRequestException {
         Ticket ticket = ticketDAO.findById(ticketId);
         if (ticket.getStatus() != TicketStatus.PENDING) {
@@ -48,5 +38,9 @@ public class TicketService {
         ticket.setResolver(principal.getId());
         ticket.setResolved(new Timestamp(System.currentTimeMillis()));
         ticketDAO.resolve(ticket);
+    }
+
+    public List<Ticket> getPending() {
+        return ticketDAO.getPendingTickets();
     }
 }

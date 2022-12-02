@@ -3,12 +3,17 @@ package org.example.ers.handlers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import org.example.ers.data_transfer_objects.requests.TicketNew;
+import org.example.ers.data_transfer_objects.responses.PendingTicket;
+import org.example.ers.data_transfer_objects.responses.Token;
 import org.example.ers.models.Principal;
+import org.example.ers.models.Ticket;
 import org.example.ers.models.TicketStatus;
 import org.example.ers.services.TicketService;
 import org.example.ers.utilities.custom_exceptions.InvalidTicketRequestException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TicketHandler {
     TicketService ticketService;
@@ -29,6 +34,13 @@ public class TicketHandler {
         } catch (InvalidTicketRequestException e) {
             ctx.status(400).result(e.getMessage());
         }
+    }
+
+    public void getPending(Context ctx) {
+        System.out.println(ctx.pathParam("status"));
+        List<Ticket> ticketList = ticketService.getPending();
+
+        ctx.json(ticketList);
     }
 
     public void resolve(Context ctx, TicketStatus status) {
