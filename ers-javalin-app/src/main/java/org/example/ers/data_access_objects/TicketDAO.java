@@ -89,4 +89,26 @@ public class TicketDAO {
         }
         return tickets;
     }
+
+    public List<Ticket> getByStatus(TicketStatus status) {
+        List<Ticket> tickets = new LinkedList<Ticket>();
+
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            String dql = "SELECT * FROM tickets WHERE status = ?::ticket_status";
+            PreparedStatement ps = con.prepareStatement(dql);
+            ps.setString(1, String.valueOf(status));
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                tickets.add(new Ticket(rs.getString("ticket_id"),
+                        rs.getDouble("amount"),
+                        rs.getTimestamp("submitted"),
+                        rs.getString("description"),
+                        rs.getString("author_id")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            logger.info("sql exception with TicketDAO.findById()");
+        }
+        return tickets;
+    }
 }

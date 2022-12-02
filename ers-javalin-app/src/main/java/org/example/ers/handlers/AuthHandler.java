@@ -12,9 +12,9 @@ import org.example.ers.utilities.custom_exceptions.InvalidCredentialsException;
 import java.io.IOException;
 
 public class AuthHandler {
-    private UserService userService;
-    private TokenService tokenService;
-    private ObjectMapper mapper;
+    private final UserService userService;
+    private final TokenService tokenService;
+    private final ObjectMapper mapper;
 
     public AuthHandler(UserService userService, TokenService tokenService, ObjectMapper mapper) {
         this.userService = userService;

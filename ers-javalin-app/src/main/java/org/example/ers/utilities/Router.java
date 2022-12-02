@@ -41,7 +41,7 @@ public class Router {
                 // for managers
                 get(ticketHandler::getAll, RoleEnum.MANAGER); // get all tickets
                 get("/type/{type}", ticketHandler::getByType, RoleEnum.MANAGER); // filter by type
-                get("/status/{status}", ticketHandler::getPending, RoleEnum.MANAGER); // filter by status
+                get("/status/{status}", ticketHandler::getByStatus, RoleEnum.MANAGER); // filter by status
                 put("approve/{id}", (ctx) -> ticketHandler.resolve(ctx, TicketStatus.APPROVED), RoleEnum.MANAGER); // approve
                 put("reject/{id}", (ctx) -> ticketHandler.resolve(ctx, TicketStatus.REJECTED), RoleEnum.MANAGER); // deny
                 get("/user/{username}", ticketHandler::getUsersTickets); // get all users submitted tickets

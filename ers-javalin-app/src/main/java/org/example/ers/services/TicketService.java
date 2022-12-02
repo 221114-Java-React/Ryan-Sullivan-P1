@@ -9,7 +9,6 @@ import org.example.ers.utilities.UtilityMethods;
 import org.example.ers.utilities.custom_exceptions.InvalidTicketRequestException;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class TicketService {
@@ -40,7 +39,7 @@ public class TicketService {
         ticketDAO.resolve(ticket);
     }
 
-    public List<Ticket> getPending() {
-        return ticketDAO.getPendingTickets();
+    public List<Ticket> getByStatus(TicketStatus status) {
+        return ticketDAO.getByStatus(status);
     }
 }
