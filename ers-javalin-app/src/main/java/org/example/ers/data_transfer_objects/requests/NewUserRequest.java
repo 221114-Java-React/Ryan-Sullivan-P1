@@ -1,14 +1,24 @@
 package org.example.ers.data_transfer_objects.requests;
 
-public class UserNew {
+public class NewUserRequest {
     private String username;
     private String email;
     private String password;
+
+    private String passwordTwo;
     private String givenName;
     private String surname;
 
     public String getUsername() {
         return username;
+    }
+
+    public String getPasswordTwo() {
+        return passwordTwo;
+    }
+
+    public void setPasswordTwo(String passwordTwo) {
+        this.passwordTwo = passwordTwo;
     }
 
     public void setUsername(String username) {
