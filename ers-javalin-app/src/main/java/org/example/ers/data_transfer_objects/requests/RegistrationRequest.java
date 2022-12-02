@@ -1,24 +1,16 @@
 package org.example.ers.data_transfer_objects.requests;
 
-public class NewUserRequest {
-    private String username;
-    private String email;
-    private String password;
-
-    private String passwordTwo;
-    private String givenName;
-    private String surname;
+public class RegistrationRequest {
+    String username;
+    String email;
+    String passwordOne;
+    String passwordTwo;
+    String givenName;
+    String surname;
+    String roleId;
 
     public String getUsername() {
         return username;
-    }
-
-    public String getPasswordTwo() {
-        return passwordTwo;
-    }
-
-    public void setPasswordTwo(String passwordTwo) {
-        this.passwordTwo = passwordTwo;
     }
 
     public void setUsername(String username) {
@@ -33,12 +25,20 @@ public class NewUserRequest {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswordOne() {
+        return passwordOne;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswordOne(String passwordOne) {
+        this.passwordOne = passwordOne;
+    }
+
+    public String getPasswordTwo() {
+        return passwordTwo;
+    }
+
+    public void setPasswordTwo(String passwordTwo) {
+        this.passwordTwo = passwordTwo;
     }
 
     public String getGivenName() {
@@ -55,5 +55,13 @@ public class NewUserRequest {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 }

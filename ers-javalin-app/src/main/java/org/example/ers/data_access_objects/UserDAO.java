@@ -15,7 +15,6 @@ public class UserDAO implements DAO<User> {
     @Override
     public void create(User user) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
-            /* always start with the PrepareStatement */
             String dml = "INSERT INTO users (user_id, username, email, password_hash, given_name, surname, role_id) ";
             dml = dml + "VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(dml);

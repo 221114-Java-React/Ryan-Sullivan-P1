@@ -1,10 +1,18 @@
 package org.example.ers.utilities;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
+import java.util.Properties;
 import java.util.UUID;
 
 public class UtilityMethods {
     public static String generateId() {
         return UUID.randomUUID().toString();
+    }
+
+    public static String hashPasswordWithSalt(String password) {
+        String salted = PropertiesFactory.getInstance().getProperties().getProperty("salt") + password;
+        return DigestUtils.sha256Hex(salted);
     }
 
     public static boolean validUsername(String username) {

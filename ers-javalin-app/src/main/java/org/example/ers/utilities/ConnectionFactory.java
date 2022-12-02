@@ -19,14 +19,10 @@ public class ConnectionFactory {
         }
     }
 
-    private final Properties properties = new Properties();
+    private final Properties properties;
 
     private ConnectionFactory() {
-        try {
-            properties.load(new FileReader("resources/db.properties"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        properties = PropertiesFactory.getInstance().getProperties();
     }
 
     public static ConnectionFactory getInstance() {

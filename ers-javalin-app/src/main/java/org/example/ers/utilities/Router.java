@@ -3,10 +3,12 @@ package org.example.ers.utilities;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import org.example.ers.handlers.AuthHandler;
+import org.example.ers.handlers.RegistrationHandler;
 import org.example.ers.handlers.TicketHandler;
 import org.example.ers.handlers.UserHandler;
 import org.example.ers.models.RoleEnum;
 import org.example.ers.models.TicketStatus;
+import org.example.ers.services.RegistrationService;
 import org.example.ers.services.TicketService;
 import org.example.ers.services.TokenService;
 import org.example.ers.services.UserService;
@@ -21,21 +23,27 @@ public class Router {
         // services
         TicketService ticketService = new TicketService();
         UserService userService = new UserService();
+        RegistrationService registrationService = new RegistrationService();
         // mapper
         ObjectMapper objectMapper = new ObjectMapper();
         // handlers
         UserHandler userHandler = new UserHandler(userService, objectMapper);
         AuthHandler authHandler = new AuthHandler(userService, tokenService, objectMapper);
         TicketHandler ticketHandler = new TicketHandler(ticketService, objectMapper);
+        RegistrationHandler registrationHandler = new RegistrationHandler(registrationService, objectMapper);
         // register routes
         app.routes(() -> {
-            path("/users", () -> {
-                post(userHandler::createUser); // create user
-                put("/{id}", userHandler::updateUser, RoleEnum.ADMIN); // update user
-                delete("/{id}", userHandler::deleteUser, RoleEnum.ADMIN); //delete user
+            path("/registration", () -> {
+                post(registrationHandler::register);
+                put("/approve/{id}", registrationHandler::approve);
             });
-            
             path("/login", () -> post(authHandler::login));
+
+            path("/users", () -> {
+                post("/{id}", userHandler::approveRegistration, RoleEnum.ADMIN); // create user from registration
+                put("/{id}", userHandler::updateUser, RoleEnum.ADMIN); // update user
+                put("deactivate/{id}", userHandler::deactivateUser, RoleEnum.ADMIN); //deactivate user
+            });
 
             path("/tickets", () -> {
                 // for managers
