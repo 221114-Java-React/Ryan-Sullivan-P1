@@ -4,7 +4,7 @@ public class User {
     private String userId;
     private String username;
     private String email;
-    private String password;
+    private String passwordHash;
     private String givenName;
     private String surname;
     private boolean isActive;
@@ -14,7 +14,7 @@ public class User {
         this.userId = id;
         this.username = username;
         this.email = email;
-        this.password = password;
+        this.passwordHash = password;
         this.givenName = givenName;
         this.surname = surname;
     }
@@ -31,7 +31,7 @@ public class User {
         this.userId = userId;
         this.username = username;
         this.email = email;
-        this.password = password;
+        this.passwordHash = password;
         this.givenName = givenName;
         this.surname = surname;
         this.isActive = isActive;
@@ -62,12 +62,12 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswordHash(String password) {
+        this.passwordHash = password;
     }
 
     public String getGivenName() {

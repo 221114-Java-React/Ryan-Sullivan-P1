@@ -16,13 +16,13 @@ public class UserDAO implements DAO<User> {
     public void create(User user) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
             /* always start with the PrepareStatement */
-            String dml = "INSERT INTO users (user_id, username, email, password, given_name, surname, role_id) ";
+            String dml = "INSERT INTO users (user_id, username, email, password_hash, given_name, surname, role_id) ";
             dml = dml + "VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(dml);
             ps.setString(1, user.getUserId());
             ps.setString(2, user.getUsername());
             ps.setString(3, user.getEmail());
-            ps.setString(4, user.getPassword());
+            ps.setString(4, user.getPasswordHash());
             ps.setString(5, user.getGivenName());
             ps.setString(6, user.getSurname());
             ps.setString(7, user.getRoleId());
@@ -40,14 +40,16 @@ public class UserDAO implements DAO<User> {
     }
 
 
-    public User findByUsernameAndPassword(String username, String password) {
+    public User findByUsernameAndPasswordHash(String username, String passwordHash) {
         User user = null;
 
+        System.out.println(passwordHash);
+
         try (Connection connection = ConnectionFactory.getInstance().getConnection()){
-            String query = "SELECT * from users WHERE username = ? AND password = ?";
+            String query = "SELECT * from users WHERE username = ? AND password_hash = ?";
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, username);
-            ps.setString(2, password);
+            ps.setString(2, passwordHash);
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.next()) {
                 String userId = resultSet.getString("user_id");
@@ -57,7 +59,7 @@ public class UserDAO implements DAO<User> {
                 boolean isActive = resultSet.getBoolean("is_active");
                 String roleId = resultSet.getString("role_id");
 
-                user = new User(userId, username, email, password, givenName, surname, isActive, roleId);
+                user = new User(userId, username, email, passwordHash, givenName, surname, isActive, roleId);
             }
         } catch (SQLException e) {
             e.printStackTrace();

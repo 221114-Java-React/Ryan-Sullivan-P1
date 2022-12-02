@@ -11,6 +11,8 @@ import org.example.ers.utilities.UtilityMethods;
 import org.example.ers.utilities.custom_exceptions.InvalidCredentialsException;
 import org.example.ers.utilities.custom_exceptions.InvalidUserFieldsException;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 
 public class UserService {
 
@@ -27,7 +29,7 @@ public class UserService {
         User newUser = new User(UtilityMethods.generateId(),
                             req.getUsername(),
                             req.getEmail(),
-                            req.getPassword(),
+                            DigestUtils.sha256Hex(req.getPassword()),
                             req.getGivenName(),
                             req.getSurname(),
                      false,
@@ -37,7 +39,7 @@ public class UserService {
     }
 
     public Principal login(LoginRequest req) throws InvalidCredentialsException {
-        User validUser = userDAO.findByUsernameAndPassword(req.getUsername(), req.getPassword());
+        User validUser = userDAO.findByUsernameAndPasswordHash(req.getUsername(), DigestUtils.sha256Hex(req.getPassword()));
         if (validUser == null) throw new InvalidCredentialsException("invalid username or password");
         UserRoleDao roleDAO = new UserRoleDao();
         String roleName = roleDAO.getApiNameFromId(validUser.getRoleId());
