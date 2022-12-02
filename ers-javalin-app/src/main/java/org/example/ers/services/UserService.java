@@ -13,8 +13,12 @@ import org.example.ers.utilities.custom_exceptions.InvalidUserFieldsException;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.util.Properties;
+
 
 public class UserService {
+
+    private final Properties properties;
 
     private final UserDAO userDAO;
     private final UserRoleDao userRoleDAO;
@@ -22,6 +26,7 @@ public class UserService {
     public UserService() {
         this.userRoleDAO = new UserRoleDao();
         this.userDAO = new UserDAO();
+        this.properties = new Properties();
     }
 
     public void createUser(NewUserRequest req) throws InvalidUserFieldsException {
@@ -29,7 +34,7 @@ public class UserService {
         User newUser = new User(UtilityMethods.generateId(),
                             req.getUsername(),
                             req.getEmail(),
-                            DigestUtils.sha256Hex(req.getPassword()),
+                            hashPasswordWithSalt(req.getPassword()),
                             req.getGivenName(),
                             req.getSurname(),
                      false,
@@ -39,7 +44,7 @@ public class UserService {
     }
 
     public Principal login(LoginRequest req) throws InvalidCredentialsException {
-        User validUser = userDAO.findByUsernameAndPasswordHash(req.getUsername(), DigestUtils.sha256Hex(req.getPassword()));
+        User validUser = userDAO.findByUsernameAndPasswordHash(req.getUsername(), hashPasswordWithSalt(req.getPassword()));
         if (validUser == null) throw new InvalidCredentialsException("invalid username or password");
         UserRoleDao roleDAO = new UserRoleDao();
         String roleName = roleDAO.getApiNameFromId(validUser.getRoleId());
@@ -59,5 +64,10 @@ public class UserService {
         // test for uniqueness
         if (this.userDAO.usernameTaken(req.getUsername())) throw new InvalidUserFieldsException("username taken");
         if (this.userDAO.emailTaken(req.getEmail())) throw new InvalidUserFieldsException("email taken");
+    }
+
+    private String hashPasswordWithSalt(String password) {
+        String salted = properties.getProperty("salt") + password;
+        return DigestUtils.sha256Hex(salted);
     }
 }

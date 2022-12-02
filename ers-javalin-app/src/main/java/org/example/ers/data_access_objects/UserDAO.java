@@ -43,8 +43,6 @@ public class UserDAO implements DAO<User> {
     public User findByUsernameAndPasswordHash(String username, String passwordHash) {
         User user = null;
 
-        System.out.println(passwordHash);
-
         try (Connection connection = ConnectionFactory.getInstance().getConnection()){
             String query = "SELECT * from users WHERE username = ? AND password_hash = ?";
             PreparedStatement ps = connection.prepareStatement(query);

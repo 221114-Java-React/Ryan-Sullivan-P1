@@ -14,7 +14,7 @@ public class UtilityMethods {
         //        Underscore and dot can't be next to each other (e.g. user_.name).
         //        Underscore or dot can't be used multiple times in a row (e.g. user__name / user..name).
         //        Number of characters between 8 and 20.
-        return username != null && username.matches("^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
+        return username != null && username.matches("^(?=[a-zA-Z0-9._]{4,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
     }
 
     public static boolean validEmail(String email) {
