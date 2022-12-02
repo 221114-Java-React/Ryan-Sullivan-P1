@@ -1,15 +1,13 @@
 package org.example.ers.services;
 
 import io.javalin.http.Context;
-// mostly unchanged from trainer-p1
-// not much reason to deviate
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import org.example.ers.models.Principal;
 import org.example.ers.data_transfer_objects.responses.Token;
+import org.example.ers.models.RoleEnum;
 import org.example.ers.utilities.JwtConfig;
-import org.example.ers.models.UserRole;
 
 import java.util.Date;
 
@@ -30,19 +28,10 @@ public class TokenService {
                 .setIssuer("revature ers system")
                 .setIssuedAt(issueTime)
                 .setExpiration(expirationTime)
-                .setSubject(principal.getUsername())
                 .claim("role", principal.getRole())
                 .signWith(jwtConfig.getSigAlg(), jwtConfig.getSigningKey());
 
         return new Token(jwtBuilder.compact());
-    }
-
-    public Principal extractRequesterDetails(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtConfig.getSigningKey())
-                .parseClaimsJws(token)
-                .getBody();
-        return new Principal(claims.getId(), claims.getSubject(), UserRole.valueOf(claims.get("role", String.class)));
     }
 
     public Principal extractUserDetailsFromContext(Context ctx) {
@@ -56,6 +45,6 @@ public class TokenService {
                 .parseClaimsJws(token)
                 .getBody();
 
-        return new Principal(claims.getId(), claims.getSubject(), UserRole.valueOf(claims.get("role", String.class)));
+        return new Principal(claims.getId(), RoleEnum.valueOf(claims.get("role", String.class)));
     }
 }

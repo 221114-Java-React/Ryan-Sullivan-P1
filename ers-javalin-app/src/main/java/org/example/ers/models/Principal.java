@@ -4,12 +4,10 @@ import org.example.ers.models.UserRole;
 
 public class Principal {
     private String id;
-    private String username;
-    private UserRole role;
+    private RoleEnum role;
 
-    public Principal(String id, String username, UserRole role) {
+    public Principal(String id, RoleEnum role) {
         this.id = id;
-        this.username = username;
         this.role = role;
     }
 
@@ -17,12 +15,7 @@ public class Principal {
         return id;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-
-    public UserRole getRole() {
+    public RoleEnum getRole() {
         return this.role;
     }
 }

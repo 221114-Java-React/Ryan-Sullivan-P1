@@ -2,8 +2,6 @@ package org.example.ers.data_access_objects;
 
 import org.example.ers.models.User;
 import org.example.ers.utilities.ConnectionFactory;
-import org.example.ers.models.UserRole;
-import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +16,8 @@ public class UserDAO implements DAO<User> {
     public void create(User user) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
             /* always start with the PrepareStatement */
-            String dml = "INSERT INTO users (user_id, username, email, password, given_name, surname, user_role) ";
-            dml = dml + "VALUES (?, ?, ?, ?, ?, ?, ?::user_role)";
+            String dml = "INSERT INTO users (user_id, username, email, password, given_name, surname, role_id) ";
+            dml = dml + "VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(dml);
             ps.setString(1, user.getUserId());
             ps.setString(2, user.getUsername());
@@ -27,7 +25,7 @@ public class UserDAO implements DAO<User> {
             ps.setString(4, user.getPassword());
             ps.setString(5, user.getGivenName());
             ps.setString(6, user.getSurname());
-            ps.setString(7, String.valueOf(UserRole.EMPLOYEE));
+            ps.setString(7, user.getRoleId());
             ps.executeUpdate();
             logger.info("new user created");
         } catch (SQLException e) {
@@ -57,9 +55,9 @@ public class UserDAO implements DAO<User> {
                 String givenName = resultSet.getString("given_name");
                 String surname = resultSet.getString("surname");
                 boolean isActive = resultSet.getBoolean("is_active");
-                UserRole role = UserRole.valueOf(resultSet.getString("user_role"));
+                String roleId = resultSet.getString("role_id");
 
-                user = new User(userId, username, email, password, givenName, surname, isActive, role);
+                user = new User(userId, username, email, password, givenName, surname, isActive, roleId);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -113,8 +111,8 @@ public class UserDAO implements DAO<User> {
                 String givenName = resultSet.getString("given_name");
                 String surname = resultSet.getString("surname");
                 boolean isActive = resultSet.getBoolean("is_active");
-                UserRole role = UserRole.valueOf(resultSet.getString("user_role"));
-                User user = new User(userId, username, email, password, givenName, surname, isActive, role);
+                String roleId = resultSet.getString("role_id");
+                User user = new User(userId, username, email, password, givenName, surname, isActive, roleId);
                 userList.add(user);
             }
         } catch (SQLException e) {

@@ -1,9 +1,11 @@
 package org.example.ers.services;
 
 import org.example.ers.data_access_objects.UserDAO;
+import org.example.ers.data_access_objects.UserRoleDao;
 import org.example.ers.data_transfer_objects.requests.LoginRequest;
 import org.example.ers.data_transfer_objects.requests.UserNew;
 import org.example.ers.models.Principal;
+import org.example.ers.models.RoleEnum;
 import org.example.ers.models.User;
 import org.example.ers.models.UserRole;
 import org.example.ers.utilities.UtilityMethods;
@@ -14,8 +16,10 @@ import org.example.ers.utilities.custom_exceptions.InvalidUserFieldsException;
 public class UserService {
 
     private final UserDAO userDAO;
+    private final UserRoleDao userRoleDAO;
 
     public UserService() {
+        this.userRoleDAO = new UserRoleDao();
         this.userDAO = new UserDAO();
     }
 
@@ -27,8 +31,8 @@ public class UserService {
                             req.getPassword(),
                             req.getGivenName(),
                             req.getSurname(),
-                            false,
-                            UserRole.EMPLOYEE);
+                     false,
+                            userRoleDAO.getIdFromApiName("EMPLOYEE"));
 
         this.userDAO.create(newUser);
     }
@@ -36,7 +40,9 @@ public class UserService {
     public Principal login(LoginRequest req) throws InvalidCredentialsException {
         User validUser = userDAO.findByUsernameAndPassword(req.getUsername(), req.getPassword());
         if (validUser == null) throw new InvalidCredentialsException("invalid username or password");
-        return new Principal(validUser.getUserId(), validUser.getUsername(), validUser.getRole());
+        UserRoleDao roleDAO = new UserRoleDao();
+        String roleName = roleDAO.getApiNameFromId(validUser.getRoleId());
+        return new Principal(validUser.getUserId(), RoleEnum.valueOf(roleName));
     }
 
      // private validation methods and helpers
