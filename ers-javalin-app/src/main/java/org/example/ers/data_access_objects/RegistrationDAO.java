@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegistrationDAO {
 
@@ -29,9 +31,22 @@ public class RegistrationDAO {
             ps.executeUpdate();
             logger.info("user registered");
         } catch (SQLException e) {
-            logger.info("registration failed to insert");
             logger.info(e.getMessage());
         }
+    }
+
+    public List<Registration> getAll() {
+        List<Registration> list = new ArrayList<Registration>();
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM registrations");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(populateFromResult(rs));
+            }
+        } catch (SQLException e) {
+            logger.info(e.getMessage());
+        }
+        return list;
     }
 
     public Registration findById(String requestId) {
@@ -41,14 +56,7 @@ public class RegistrationDAO {
             ps.setString(1, requestId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                registration = new Registration();
-                registration.setUsername(rs.getString("username"));
-                registration.setRequestId(rs.getString("request_id"));
-                registration.setEmail(rs.getString("email"));
-                registration.setGivenName(rs.getString("given_name"));
-                registration.setSurname(rs.getString("surname"));
-                registration.setRoleId(rs.getString("role_id"));
-                registration.setPasswordHash(rs.getString("password_hash"));
+                registration = populateFromResult(rs);
             }
         } catch (SQLException e) {
             logger.info(e.getMessage());
@@ -56,13 +64,55 @@ public class RegistrationDAO {
         return registration;
     }
 
-    public void delete(String requestId) {
+    private Registration populateFromResult(ResultSet rs) throws SQLException {
+        Registration registration = new Registration();
+        registration.setRequestId(rs.getString("request_id"));
+        registration.setUsername(rs.getString("username"));
+        registration.setEmail(rs.getString("email"));
+        registration.setGivenName(rs.getString("given_name"));
+        registration.setSurname(rs.getString("surname"));
+        registration.setRoleId(rs.getString("role_id"));
+        registration.setPasswordHash(rs.getString("password_hash"));
+        return registration;
+    }
+
+
+    public void delete(String username) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = con.prepareStatement("DELETE FROM registrations WHERE request_id = ?");
-            ps.setString(1, requestId);
+            PreparedStatement ps = con.prepareStatement("DELETE FROM registrations WHERE username = ?");
+            ps.setString(1, username);
             ps.execute();
+            logger.info("registration for " + username + "deleted");
         } catch (SQLException e) {
             logger.info(e.getMessage());
         }
+    }
+
+    public boolean usernameTaken(String username) {
+        ResultSet resultSet;
+        try(Connection connection = ConnectionFactory.getInstance().getConnection()) {
+            String query = "SELECT username from registrations WHERE username = ?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, username);
+            resultSet = ps.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    public boolean emailTaken(String email) {
+        ResultSet resultSet;
+        try(Connection connection = ConnectionFactory.getInstance().getConnection()) {
+            String query = "SELECT email FROM registrations WHERE email = ?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, email);
+            resultSet = ps.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            logger.info(e.getMessage());
+        }
+        return true;
     }
 }

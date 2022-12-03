@@ -54,8 +54,7 @@ public class UserDAO {
                 user = new User(userId, username, email, passwordHash, givenName, surname, isActive, roleId);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            logger.info("sql exception when querying for username and password", e);
+            logger.info(e.getMessage());
         }
         return user;
     }
@@ -70,21 +69,19 @@ public class UserDAO {
             return resultSet.next();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
         }
         return true;
     }
     public boolean emailTaken(String email) {
         ResultSet resultSet;
         try(Connection connection = ConnectionFactory.getInstance().getConnection()) {
-            String query = "SELECT email from users WHERE email = ?";
+            String query = "SELECT email FROM users WHERE email = ?";
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, email);
             resultSet = ps.executeQuery();
             return resultSet.next();
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1);
+            logger.info(e.getMessage());
         }
         return true;
     }
@@ -109,8 +106,7 @@ public class UserDAO {
                 userList.add(user);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            logger.info("query failure", e);
+            logger.info(e.getMessage());
         }
 
         return userList;

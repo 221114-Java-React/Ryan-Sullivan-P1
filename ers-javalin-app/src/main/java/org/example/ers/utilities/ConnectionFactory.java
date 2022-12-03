@@ -1,7 +1,8 @@
 package org.example.ers.utilities;
 
-import java.io.FileReader;
-import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -10,6 +11,7 @@ import java.util.Properties;
 public class ConnectionFactory {
 
     private static ConnectionFactory connectionFactory;
+    private final static Logger logger = LoggerFactory.getLogger(ConnectionFactory.class);
 
     static {
         try {
@@ -39,9 +41,7 @@ public class ConnectionFactory {
                                                                 properties.getProperty("username"),
                                                                 properties.getProperty("password"));
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Could not establish connection with DB!");
-            System.exit(1);
+            logger.info(e.getMessage());
         }
         return connection;
     }

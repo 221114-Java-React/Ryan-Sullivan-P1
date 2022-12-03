@@ -4,6 +4,7 @@ import io.javalin.core.security.RouteRole;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import org.example.ers.models.Principal;
 import org.example.ers.services.TokenService;
 
@@ -22,7 +23,7 @@ public class AccessConfiguration {
             try {
                 principal = tokenService.extractUserDetailsFromToken(token);
                 context.attribute("principal", principal);
-            } catch (ExpiredJwtException e){
+            } catch (JwtException e) {
                 context.status(400).result(e.getMessage());
                 return;
             }

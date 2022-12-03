@@ -42,4 +42,18 @@ public class UserRoleDAO {
             return e.getMessage();
         }
     }
+
+    public boolean validRole(String api_name) {
+        ResultSet resultSet;
+        try(Connection connection = ConnectionFactory.getInstance().getConnection()) {
+            String query = "SELECT api_name FROM user_roles WHERE api_name = ?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, api_name);
+            resultSet = ps.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            logger.info(e.getMessage());
+        }
+        return false;
+    }
 }

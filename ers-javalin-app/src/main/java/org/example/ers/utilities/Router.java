@@ -14,6 +14,8 @@ import org.example.ers.services.TokenService;
 import org.example.ers.services.UserService;
 
 
+import javax.management.relation.Role;
+
 import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Router {
@@ -32,28 +34,31 @@ public class Router {
         RegistrationHandler registrationHandler = new RegistrationHandler(registrationService, objectMapper);
         // register routes
         app.routes(() -> {
-            path("/registration", () -> {
+            path("registrations", () -> {
                 post(registrationHandler::register);
-                put("/approve/{id}", registrationHandler::approve, RoleEnum.ADMIN);
-            });
-            path("/login", () -> post(authHandler::login));
-
-            path("/users", () -> {
-                post("/{id}", userHandler::approveRegistration, RoleEnum.ADMIN); // create user from registration
-                put("/{id}", userHandler::updateUser, RoleEnum.ADMIN); // update user
-                put("deactivate/{id}", userHandler::deactivateUser, RoleEnum.ADMIN); //deactivate user
+                get(registrationHandler::getAll, RoleEnum.ADMIN);
+                get("{username}", registrationHandler::getByUsername, RoleEnum.ADMIN);
+                delete("{username}", registrationHandler::delete, RoleEnum.ADMIN);
             });
 
-            path("/tickets", () -> {
+            path("users", () -> {
+                post("{username}", userHandler::approveRegistration, RoleEnum.ADMIN);
+                put("{username}", userHandler::updateUser, RoleEnum.ADMIN);
+            });
+
+            path("login", () -> post(authHandler::login));
+
+            path("tickets", () -> {
                 // for managers
                 get(ticketHandler::getAll, RoleEnum.MANAGER); // get all tickets
-                get("/type/{type}", ticketHandler::getByType, RoleEnum.MANAGER); // filter by type
-                get("/status/{status}", ticketHandler::getByStatus, RoleEnum.MANAGER); // filter by status
-                put("approve/{id}", (ctx) -> ticketHandler.resolve(ctx, TicketStatus.APPROVED), RoleEnum.MANAGER); // approve
-                put("reject/{id}", (ctx) -> ticketHandler.resolve(ctx, TicketStatus.REJECTED), RoleEnum.MANAGER); // deny
-                get("/user/{username}", ticketHandler::getUsersTickets); // get all users submitted tickets
-                get("/details/{id}", ticketHandler::getDetails); // get ticket details
-                post(ticketHandler::submit); // submit new ticket
+                put("approve/{id}", (ctx) -> ticketHandler.resolve(ctx, TicketStatus.APPROVED), RoleEnum.MANAGER);
+                put("reject/{id}", (ctx) -> ticketHandler.resolve(ctx, TicketStatus.REJECTED), RoleEnum.MANAGER);
+
+                // for employees
+                post(ticketHandler::submit, RoleEnum.EMPLOYEE, RoleEnum.MANAGER, RoleEnum.ADMIN); // submit new ticket
+                get("mine", ticketHandler::getUsersTickets, RoleEnum.EMPLOYEE, RoleEnum.MANAGER, RoleEnum.ADMIN);
+                put("mine/{id}", (ctx) -> ticketHandler.resolve(ctx, TicketStatus.REJECTED), RoleEnum.MANAGER);
+                delete("mine/{id}", (ctx) -> ticketHandler.resolve(ctx, TicketStatus.REJECTED), RoleEnum.MANAGER);
             });
         });
 
