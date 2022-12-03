@@ -28,6 +28,8 @@ public class RegistrationHandler {
     }
 
     public void approve(Context ctx) {
-
+        String registrationId = ctx.pathParam("id");
+        registrationService.approve(registrationId);
+        ctx.status(201);
     }
 }

@@ -9,6 +9,9 @@ public class Registration {
     String surname;
     String roleId;
 
+    public Registration() {
+    }
+
     public Registration(String requestId, String username, String email, String passwordHash, String givenName, String surname, String roleId) {
         this.requestId = requestId;
         this.username = username;
@@ -16,6 +19,34 @@ public class Registration {
         this.passwordHash = passwordHash;
         this.givenName = givenName;
         this.surname = surname;
+        this.roleId = roleId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public void setGivenName(String givenName) {
+        this.givenName = givenName;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setRoleId(String roleId) {
         this.roleId = roleId;
     }
 

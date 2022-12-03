@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RegistrationDAO {
@@ -29,6 +30,38 @@ public class RegistrationDAO {
             logger.info("user registered");
         } catch (SQLException e) {
             logger.info("registration failed to insert");
+            logger.info(e.getMessage());
+        }
+    }
+
+    public Registration findById(String requestId) {
+        Registration registration = null;
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM registrations WHERE request_id = ?");
+            ps.setString(1, requestId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                registration = new Registration();
+                registration.setUsername(rs.getString("username"));
+                registration.setRequestId(rs.getString("request_id"));
+                registration.setEmail(rs.getString("email"));
+                registration.setGivenName(rs.getString("given_name"));
+                registration.setSurname(rs.getString("surname"));
+                registration.setRoleId(rs.getString("role_id"));
+                registration.setPasswordHash(rs.getString("password_hash"));
+            }
+        } catch (SQLException e) {
+            logger.info(e.getMessage());
+        }
+        return registration;
+    }
+
+    public void delete(String requestId) {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("DELETE FROM registrations WHERE request_id = ?");
+            ps.setString(1, requestId);
+            ps.execute();
+        } catch (SQLException e) {
             logger.info(e.getMessage());
         }
     }

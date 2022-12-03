@@ -35,7 +35,7 @@ public class Router {
         app.routes(() -> {
             path("/registration", () -> {
                 post(registrationHandler::register);
-                put("/approve/{id}", registrationHandler::approve);
+                put("/approve/{id}", registrationHandler::approve, RoleEnum.ADMIN);
             });
             path("/login", () -> post(authHandler::login));
 

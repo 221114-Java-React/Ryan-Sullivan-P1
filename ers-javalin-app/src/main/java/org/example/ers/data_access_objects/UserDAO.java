@@ -1,7 +1,9 @@
 package org.example.ers.data_access_objects;
 
+import org.example.ers.models.Registration;
 import org.example.ers.models.User;
 import org.example.ers.utilities.ConnectionFactory;
+import org.example.ers.utilities.UtilityMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,22 +11,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
 
-public class UserDAO implements DAO<User> {
+public class UserDAO {
 
     private final static Logger logger = LoggerFactory.getLogger(UserDAO.class);
-    @Override
-    public void create(User user) {
+    public void createFromRegistration(Registration registration) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
             String dml = "INSERT INTO users (user_id, username, email, password_hash, given_name, surname, role_id) ";
             dml = dml + "VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(dml);
-            ps.setString(1, user.getUserId());
-            ps.setString(2, user.getUsername());
-            ps.setString(3, user.getEmail());
-            ps.setString(4, user.getPasswordHash());
-            ps.setString(5, user.getGivenName());
-            ps.setString(6, user.getSurname());
-            ps.setString(7, user.getRoleId());
+            ps.setString(1, UtilityMethods.generateId());
+            ps.setString(2, registration.getUsername());
+            ps.setString(3, registration.getEmail());
+            ps.setString(4, registration.getPasswordHash());
+            ps.setString(5, registration.getGivenName());
+            ps.setString(6, registration.getSurname());
+            ps.setString(7, registration.getRoleId());
             ps.executeUpdate();
             logger.info("new user created");
         } catch (SQLException e) {
@@ -32,12 +33,6 @@ public class UserDAO implements DAO<User> {
             logger.info("create user dml failed");
         }
     }
-
-    @Override
-    public User findById(String id) {
-        return null;
-    }
-
 
     public User findByUsernameAndPasswordHash(String username, String passwordHash) {
         User user = null;
@@ -94,7 +89,6 @@ public class UserDAO implements DAO<User> {
         return true;
     }
 
-    @Override
     public List<User> findAll() {
         List<User> userList = new ArrayList<>();
 
@@ -120,17 +114,5 @@ public class UserDAO implements DAO<User> {
         }
 
         return userList;
-    }
-
-
-    @Override
-    public void update(User obj) {
-
-    }
-
-
-    @Override
-    public void delete(String id) {
-
     }
 }
