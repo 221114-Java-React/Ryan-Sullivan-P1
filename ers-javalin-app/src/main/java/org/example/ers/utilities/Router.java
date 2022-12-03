@@ -12,7 +12,6 @@ import org.example.ers.services.RegistrationService;
 import org.example.ers.services.TicketService;
 import org.example.ers.services.TokenService;
 import org.example.ers.services.UserService;
-import org.example.ers.models.UserRole;
 
 
 import static io.javalin.apibuilder.ApiBuilder.*;
