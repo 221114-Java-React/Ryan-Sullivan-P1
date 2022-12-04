@@ -134,21 +134,21 @@ body
 ### Functional Requirement Goals
 
 - [x] An new employee or new finance manager can request registration with the system
-  - `POST /registrations` 
-- [x] An admin user can approve or deny new registration requests
-  - [x] The system will register the user's information for payment processing
-  - `GET /registrations`, (see registrations in system)
-  - `POST /users/{username}` (approve)
-  - `DELETE /registrations/{username}` (deny)
+  - [x] `POST /registrations` 
+- [x] An admin user can approve or deny new registration requests and the system will register the user's information for payment processing
+  - [x] `GET /registrations`, (see registrations in system)
+  - [x] `POST /users/{username}` (approve)
+  - [x] `DELETE /registrations/{username}` (deny)
 
 - [x] A registered employee can authenticate with the system by providing valid credentials
-  - `POST /login` 
+  - [x] `POST /login` 
 - [ ] An authenticated employee can view and manage their pending reimbursement requests
-  - `GET /tickets/mine/pending` (view)
-  - `PUT /tickets/mine/{id}` (and manage)
-  - `DELETE /tickets/mine/{id}` (and manage)
+  - [ ] `GET /tickets/mine/pending` (view)
+  - [ ] `PUT /tickets/mine/{id}` (and manage)
+  - [ ] `DELETE /tickets/mine/{id}` (and manage)
 - [ ] An authenticated employee can view their reimbursement request history (sortable and filterable)
-  - `GET /tickets/mine/filtered` 
+  - [x] `GET /tickets/mine`
+  - [ ] `GET /tickets/mine/filtered` 
 - [x] An authenticated employee can submit a new reimbursement request
   - `POST /tickets`
 - [ ] An authenticated finance manager can view a list of all pending reimbursement requests

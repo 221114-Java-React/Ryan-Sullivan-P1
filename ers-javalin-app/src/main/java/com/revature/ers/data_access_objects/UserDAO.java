@@ -17,7 +17,7 @@ public class UserDAO {
     public void createFromRegistration(Registration registration) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
             String dml = "INSERT INTO users (user_id, username, email, password_hash, given_name, surname, role_id, is_active)";
-            dml = dml + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            dml = dml + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(dml);
             ps.setString(1, UtilityMethods.generateId());
             ps.setString(2, registration.getUsername());

@@ -52,4 +52,8 @@ public class TicketService {
     public List<Ticket> getByStatus(TicketStatus status) {
         return ticketDAO.getByStatus(status);
     }
+
+    public List<Ticket> getAllForUser(String userId) {
+        return ticketDAO.getAllForUser(userId);
+    }
 }

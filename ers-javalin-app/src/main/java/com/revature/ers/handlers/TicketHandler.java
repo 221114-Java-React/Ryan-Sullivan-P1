@@ -43,6 +43,9 @@ public class TicketHandler {
     }
 
     public void getAllMyTickets(Context ctx) {
+        Principal principal = ctx.attribute("principal");
+        List<Ticket> tickets = ticketService.getAllForUser(principal.getId());
+        ctx.json(tickets);
     }
 
     public void getMyPendingTickets(Context ctx) {

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -88,5 +89,39 @@ public class TicketDAO {
             logger.info("sql exception with TicketDAO.findById()");
         }
         return tickets;
+    }
+
+    public List<Ticket> getAllForUser(String userId) {
+        List<Ticket> tickets = new ArrayList<Ticket>();
+
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            String dql = "SELECT * FROM tickets WHERE author_id = ?";
+            PreparedStatement ps = con.prepareStatement(dql);
+            ps.setString(1, userId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                tickets.add(populateFromResult(rs));
+            }
+        } catch (SQLException e) {
+            logger.info(e.getMessage());
+        }
+
+        return tickets;
+    }
+
+    private Ticket populateFromResult(ResultSet result) throws SQLException {
+        Ticket ticket = new Ticket();
+
+        ticket.setTicketId(result.getString("ticket_id"));
+        ticket.setAmount(result.getDouble("amount"));
+        ticket.setResolved(result.getTimestamp("resolved"));
+        ticket.setSubmitted(result.getTimestamp("submitted"));
+        ticket.setDescription(result.getString("description"));
+        ticket.setAuthorId(result.getString("author_id"));
+        ticket.setResolver(result.getString("resolver_id"));
+        ticket.setStatus(TicketStatus.valueOf(result.getString("status")));
+        ticket.setType(result.getString("ticket_type"));
+
+        return ticket;
     }
 }
