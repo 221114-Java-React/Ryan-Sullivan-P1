@@ -1,6 +1,7 @@
 package com.revature.ers.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.ers.models.Principal;
 import com.revature.ers.services.UserService;
 import io.javalin.http.Context;
 
@@ -17,10 +18,13 @@ public class UserHandler {
     }
 
     public void resetUserPassword(Context ctx) {
-        System.out.println("update user only admin should be able to do this");
+        String username = ctx.pathParam("username");
+        String newPassword = this.userService.resetPassword(username);
+        ctx.status(200).result(newPassword);
     }
 
-    public void deactivateUser(Context ctx) {
-        System.out.println("update user only admin should be able to do this");
+    public void updateUserIsActive(Context ctx, boolean isActive) {
+        String username = ctx.pathParam("username");
+        this.userService.updateUserIsActive(username, isActive);
     }
 }

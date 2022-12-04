@@ -2,6 +2,7 @@ package com.revature.ers.utilities;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
@@ -14,6 +15,10 @@ public class UtilityMethods {
     public static String hashPasswordWithSalt(String password) {
         String salted = PropertiesFactory.getInstance().getProperties().getProperty("salt") + password;
         return DigestUtils.sha256Hex(salted);
+    }
+
+    public static String generateRandomPw() {
+        return RandomStringUtils.random(8, true, true);
     }
 
     public static boolean validUsername(String username) {

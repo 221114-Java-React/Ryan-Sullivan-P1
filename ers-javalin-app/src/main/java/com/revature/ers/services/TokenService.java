@@ -1,6 +1,6 @@
 package com.revature.ers.services;
 
-import com.revature.ers.data_transfer_objects.responses.Token;
+import com.revature.ers.data_transfer_objects.responses.TokenResponse;
 import com.revature.ers.models.Principal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -18,7 +18,7 @@ public class TokenService {
         this.jwtConfig = jwtConfig;
     }
 
-    public Token generateToken(Principal principal) {
+    public TokenResponse generateToken(Principal principal) {
         long now = System.currentTimeMillis();
         long expiration = now + jwtConfig.getValidForTime();
         Date issueTime = new Date(now);
@@ -31,7 +31,7 @@ public class TokenService {
                 .claim("role", principal.getRole())
                 .signWith(jwtConfig.getSigAlg(), jwtConfig.getSigningKey());
 
-        return new Token(jwtBuilder.compact());
+        return new TokenResponse(jwtBuilder.compact());
     }
 
     public Principal extractUserDetailsFromToken(String token) {

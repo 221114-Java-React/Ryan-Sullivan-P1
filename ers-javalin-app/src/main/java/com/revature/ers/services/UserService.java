@@ -33,4 +33,15 @@ public class UserService {
         userDAO.createFromRegistration(registration);
         registrationDAO.delete(registration.getRequestId());
     }
+
+    public String resetPassword(String username) {
+        String newPassword = UtilityMethods.generateRandomPw();
+        String hashedPassword = UtilityMethods.hashPasswordWithSalt(newPassword);
+        userDAO.updatePassword(username, hashedPassword);
+        return newPassword;
+    }
+
+    public void updateUserIsActive(String username, boolean isActive) {
+        userDAO.updateUserIsActive(username, isActive);
+    }
 }

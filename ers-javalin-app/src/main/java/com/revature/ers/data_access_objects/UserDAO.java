@@ -16,7 +16,7 @@ public class UserDAO {
     private final static Logger logger = LoggerFactory.getLogger(UserDAO.class);
     public void createFromRegistration(Registration registration) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
-            String dml = "INSERT INTO users (user_id, username, email, password_hash, given_name, surname, role_id) ";
+            String dml = "INSERT INTO users (user_id, username, email, password_hash, given_name, surname, role_id, is_active)";
             dml = dml + "VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(dml);
             ps.setString(1, UtilityMethods.generateId());
@@ -26,6 +26,7 @@ public class UserDAO {
             ps.setString(5, registration.getGivenName());
             ps.setString(6, registration.getSurname());
             ps.setString(7, registration.getRoleId());
+            ps.setBoolean(8, true);
             ps.executeUpdate();
             logger.info("new user created");
         } catch (SQLException e) {
@@ -84,5 +85,31 @@ public class UserDAO {
             logger.info(e.getMessage());
         }
         return true;
+    }
+
+    public void updatePassword(String username, String pwHash) {
+        try (Connection connection = ConnectionFactory.getInstance().getConnection()){
+            String dml = "UPDATE users SET password_hash = ? WHERE username = ?";
+            PreparedStatement ps = connection.prepareStatement(dml);
+            ps.setString(1, pwHash);
+            ps.setString(2, username);
+            System.out.println(ps.executeUpdate());
+            logger.info("password reset");
+        } catch (SQLException e) {
+            logger.info(e.getMessage());
+        }
+    }
+
+    public void updateUserIsActive(String username, boolean isActive) {
+        try (Connection connection = ConnectionFactory.getInstance().getConnection()){
+            String dml = "UPDATE users SET is_active = ? WHERE username = ?";
+            PreparedStatement ps = connection.prepareStatement(dml);
+            ps.setBoolean(1, isActive);
+            ps.setString(2, username);
+            System.out.println(ps.executeUpdate());
+            logger.info("user is_active updated");
+        } catch (SQLException e) {
+            logger.info(e.getMessage());
+        }
     }
 }

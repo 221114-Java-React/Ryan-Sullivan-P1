@@ -2,14 +2,14 @@ package com.revature.ers.data_transfer_objects.responses;
 
 import java.sql.Timestamp;
 
-public class PendingTicket {
+public class PendingTicketResponse {
     String ticketId;
     Timestamp submitted;
     double amount;
     String description;
     String author;
 
-    public PendingTicket(String ticketId, Timestamp submitted, double amount, String description, String author) {
+    public PendingTicketResponse(String ticketId, Timestamp submitted, double amount, String description, String author) {
         this.ticketId = ticketId;
         this.submitted = submitted;
         this.amount = amount;

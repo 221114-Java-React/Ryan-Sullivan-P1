@@ -1,9 +1,9 @@
 package com.revature.ers.data_transfer_objects.responses;
 
-public class Token {
+public class TokenResponse {
     private String authorization;
 
-    public Token(String authorization) {
+    public TokenResponse(String authorization) {
         this.authorization = authorization;
     }
 

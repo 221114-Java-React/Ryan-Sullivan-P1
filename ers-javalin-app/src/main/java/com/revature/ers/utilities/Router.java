@@ -19,24 +19,27 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 public class Router {
 
     public static void registerRoutes(Javalin app, TokenService tokenService) {
+        // mapper
+        ObjectMapper objectMapper = new ObjectMapper();
+
         // services
         TicketService ticketService = new TicketService();
         UserService userService = new UserService();
         RegistrationService registrationService = new RegistrationService();
-        // mapper
-        ObjectMapper objectMapper = new ObjectMapper();
+
         // handlers
         UserHandler userHandler = new UserHandler(userService);
         AuthHandler authHandler = new AuthHandler(userService, tokenService, objectMapper);
         TicketHandler ticketHandler = new TicketHandler(ticketService, objectMapper);
         RegistrationHandler registrationHandler = new RegistrationHandler(registrationService, objectMapper);
+
         // register routes
         app.routes(() -> {
             path("login", () -> post(authHandler::login));
 
             path("registrations", () -> {
                 post(registrationHandler::register);
-                // approval or denial of registration by managers only
+                // approval or denial of registration by administrators only
                 get(registrationHandler::getAll, RoleEnum.ADMIN);
                 delete("{username}", registrationHandler::delete, RoleEnum.ADMIN);
             });
@@ -45,7 +48,16 @@ public class Router {
             path("users", () -> {
                 post("{username}", userHandler::approveRegistration, RoleEnum.ADMIN);
                 put("reset/{username}", userHandler::resetUserPassword, RoleEnum.ADMIN);
-                put("deactivate/{username}", userHandler::deactivateUser, RoleEnum.ADMIN);
+                put("deactivate/{username}",
+                        (ctx) -> {
+                                userHandler.updateUserIsActive(ctx, false);
+                            },
+                        RoleEnum.ADMIN);
+                put("reactivate/{username}",
+                        (ctx) -> {
+                            userHandler.updateUserIsActive(ctx, true);
+                        },
+                        RoleEnum.ADMIN);
             });
 
             path("tickets", () -> {
@@ -65,6 +77,5 @@ public class Router {
                 put("reject/{id}", (ctx) -> ticketHandler.resolve(ctx, TicketStatus.REJECTED), RoleEnum.MANAGER);
             });
         });
-
     }
 }

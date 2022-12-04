@@ -134,36 +134,54 @@ body
 ### Functional Requirement Goals
 
 - [x] An new employee or new finance manager can request registration with the system
+  - `POST /registrations` 
 - [x] An admin user can approve or deny new registration requests
-- [x] The system will register the user's information for payment processing
+  - [x] The system will register the user's information for payment processing
+  - `GET /registrations`, (see registrations in system)
+  - `POST /users/{username}` (approve)
+  - `DELETE /registrations/{username}` (deny)
+
 - [x] A registered employee can authenticate with the system by providing valid credentials
-- [] An authenticated employee can view and manage their pending reimbursement requests
-- [] An authenticated employee can view their reimbursement request history (sortable and filterable)
+  - `POST /login` 
+- [ ] An authenticated employee can view and manage their pending reimbursement requests
+  - `GET /tickets/mine/pending` (view)
+  - `PUT /tickets/mine/{id}` (and manage)
+  - `DELETE /tickets/mine/{id}` (and manage)
+- [ ] An authenticated employee can view their reimbursement request history (sortable and filterable)
+  - `GET /tickets/mine/filtered` 
 - [x] An authenticated employee can submit a new reimbursement request
-- [] An authenticated finance manager can view a list of all pending reimbursement requests
+  - `POST /tickets`
+- [ ] An authenticated finance manager can view a list of all pending reimbursement requests
+  - `GET /tickets/pending` 
 - [x] An authenticated finance manager can view a history of requests that they have approved/denied
+  - `GET /tickets/approved` 
+  - `GET /tickets/rejected`
 - [x] An authenticated finance manager can approve/deny reimbursement requests
-- [] An admin user can deactivate user accounts, making them unable to log into the system
-- [] An admin user can reset a registered user's password
+  - `POST /tickets/approve/{ticket_id}`
+  - `POST /tickets/reject/{ticket_id}`
+- [x] An admin user can deactivate user accounts, making them unable to log into the system
+  - `PUT /users/deactive/{username}` 
+- [x] An admin user can reset a registered user's password
+  - `PUT /users/reset/{username}` 
 
 ### Non-Functional Requirements
 
-- [] Basic validation is enforced to ensure that invalid/improper data is not persisted
+- [ ] Basic validation is enforced to ensure that invalid/improper data is not persisted
 - [x] User passwords will be encrypted by the system before persisting them to the data source
-- [] Users are unable to recall reimbursement requests once they have been processed (only pending allowed)
+- [ ] Users are unable to recall reimbursement requests once they have been processed (only pending allowed)
 - [x] Sensitive endpoints are protected from unauthenticated and unauthorized requesters using JWTs
-- [] Errors and exceptions are handled properly and their details are obfuscated from the user
+- [ ] Errors and exceptions are handled properly and their details are obfuscated from the user
 - [x] The system conforms to RESTful architecture constraints
-- [] The system's is tested with at least 80% line coverage in all service and utility classes
-- [] The system keeps detailed logs on info, error, and fatal events that occur
+- [ ] The system's is tested with at least 80% line coverage in all service and utility classes
+- [ ] The system keeps detailed logs on info, error, and fatal events that occur
 
 ### Suggested Bonus Features
-- [] Authenticated employees are able to upload an receipt image along with their reimbursement request
-- [] Run your application within a Docker container
-- [] Automate builds using Jenkins
+- [ ] Authenticated employees are able to upload an receipt image along with their reimbursement request
+- [ ] Run your application within a Docker container
+- [ ] Automate builds using Jenkins
 ## Milestones
 
-- [] Project requirements delivered
+- [ ] Project requirements delivered
 - [x] Remote repository is created and is being kept up to date
 - [x] Core model classes are created
 - [x] Registration/Authentication/User operations in progress
@@ -173,8 +191,8 @@ body
 - [x] Registration/Authentication/User operations complete
 - [x] Reimbursement operations in progress
 - [x] Basic persistence layer operations in progress
-- Testing of business logic is in progress
-- [x]Registration/Authentication web endpoints are accessible and functional
+- [ ] Testing of business logic is in progress
+- [x] Registration/Authentication web endpoints are accessible and functional
 - [x] Reimbursement web endpoints are accessible and functional
 - [x] User passwords are encrypted when persisted to the DB
-- []Testing of business logic is in progress
+- [ ] Testing of business logic is in progress
