@@ -1,18 +1,23 @@
 package com.revature.ers.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import com.revature.ers.data_access_objects.TicketDAO;
 import io.javalin.http.Context;
-import com.revature.ers.data_transfer_objects.requests.TicketNew;
+import com.revature.ers.data_transfer_objects.requests.SubmitTicketRequest;
 import com.revature.ers.models.Principal;
 import com.revature.ers.models.Ticket;
 import com.revature.ers.models.TicketStatus;
 import com.revature.ers.services.TicketService;
 import com.revature.ers.utilities.custom_exceptions.InvalidTicketRequestException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
 
 public class TicketHandler {
+    private final static Logger logger = LoggerFactory.getLogger(TicketHandler.class);
     TicketService ticketService;
     ObjectMapper mapper;
 
@@ -24,16 +29,43 @@ public class TicketHandler {
 
     public void submit(Context ctx) throws IOException {
         Principal principal = ctx.attribute("principal");
-        TicketNew newTicketRequest = mapper.readValue(ctx.req.getInputStream(), TicketNew.class);
         try {
+            SubmitTicketRequest newTicketRequest = mapper.readValue(ctx.req.getInputStream(), SubmitTicketRequest.class);
             ticketService.createTicket(newTicketRequest, principal);
             ctx.status(201); // created
+        } catch (UnrecognizedPropertyException e) {
+            logger.info(e.getMessage());
+            ctx.status(400).result(e.getMessage());
         } catch (InvalidTicketRequestException e) {
+            logger.info(e.getMessage());
             ctx.status(400).result(e.getMessage());
         }
     }
 
-    public void getByStatus(Context ctx) {
+    public void getAllMyTickets(Context ctx) {
+    }
+
+    public void getMyPendingTickets(Context ctx) {
+
+    }
+
+    public void getMyFilteredTickets(Context ctx) {
+
+    }
+
+    public void updateMyTicket(Context ctx) {
+
+    }
+
+    public void deleteMyTicket(Context ctx) {
+
+    }
+
+    public void getAllPending(Context ctx) {
+
+    }
+
+    public void getByStatusForManager(Context ctx) {
         TicketStatus status = TicketStatus.valueOf(ctx.pathParam("status").toUpperCase());
         List<Ticket> ticketList = ticketService.getByStatus(status);
         ctx.json(ticketList);
@@ -48,21 +80,5 @@ public class TicketHandler {
         } catch (InvalidTicketRequestException e) {
             ctx.status(409).result(e.getMessage());
         }
-    }
-
-    public void getAll(Context ctx) {
-
-    }
-
-    public void getUsersTickets(Context ctx) {
-
-    }
-
-    public void getByType(Context ctx) {
-
-    }
-
-    public void getDetails(Context ctx) {
-
     }
 }

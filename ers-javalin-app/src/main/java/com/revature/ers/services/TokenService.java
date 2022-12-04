@@ -12,7 +12,7 @@ import com.revature.ers.utilities.JwtConfig;
 import java.util.Date;
 
 public class TokenService {
-    private JwtConfig jwtConfig;
+    private final JwtConfig jwtConfig;
 
     public TokenService(JwtConfig jwtConfig) {
         this.jwtConfig = jwtConfig;
@@ -27,7 +27,7 @@ public class TokenService {
                 .setId(principal.getId())
                 .setIssuer("revature ers system")
                 .setIssuedAt(issueTime)
-                .setExpiration(expirationTime)
+//                .setExpiration(expirationTime)
                 .claim("role", principal.getRole())
                 .signWith(jwtConfig.getSigAlg(), jwtConfig.getSigningKey());
 

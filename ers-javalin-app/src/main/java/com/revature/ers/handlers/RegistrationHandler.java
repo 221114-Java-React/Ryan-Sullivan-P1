@@ -8,11 +8,14 @@ import io.javalin.http.Context;
 import com.revature.ers.data_transfer_objects.requests.RegistrationRequest;
 import com.revature.ers.services.RegistrationService;
 import com.revature.ers.utilities.custom_exceptions.InvalidUserFieldsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
 
 public class RegistrationHandler {
+    private final static Logger logger = LoggerFactory.getLogger(RegistrationHandler.class);
     private final RegistrationService registrationService;
     private final ObjectMapper mapper;
 
@@ -31,30 +34,22 @@ public class RegistrationHandler {
         try {
             registrationService.register(request);
             ctx.status(201);
+            logger.info("registration created");
         } catch (InvalidUserFieldsException e) {
             ctx.status(400).result(e.getMessage());
         }
-
     }
 
     public void getAll(Context ctx) {
         ctx.status(200).json(this.registrationService.getAll());
+        logger.info("request for all registrations completed");
     }
 
-    public void getByUsername(Context ctx) {
-        String username = ctx.pathParam("username");
-        RegistrationResponseDTO reg = this.registrationService.getByUsername(username);
-        ctx.status(200).json(reg);
-    }
+
 
     public void delete(Context ctx) {
         String username = ctx.pathParam("username");
         registrationService.delete(username);
-    }
-
-    public void approve(Context ctx) {
-        String registrationId = ctx.pathParam("id");
-        registrationService.approve(registrationId);
-        ctx.status(201);
+        logger.info("registration deleted");
     }
 }

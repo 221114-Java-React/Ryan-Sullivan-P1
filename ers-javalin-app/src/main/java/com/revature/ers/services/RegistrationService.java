@@ -3,6 +3,7 @@ package com.revature.ers.services;
 import com.revature.ers.data_access_objects.RegistrationDAO;
 import com.revature.ers.data_transfer_objects.responses.RegistrationResponseDTO;
 import com.revature.ers.models.Registration;
+import com.revature.ers.models.User;
 import org.apache.commons.beanutils.BeanUtils;
 import com.revature.ers.data_access_objects.UserDAO;
 import com.revature.ers.data_access_objects.UserRoleDAO;
@@ -16,9 +17,9 @@ import java.util.List;
 
 
 public class RegistrationService {
-    private RegistrationDAO registrationDAO;
-    private UserDAO userDAO;
-    private UserRoleDAO userRoleDAO;
+    private final RegistrationDAO registrationDAO;
+    private final UserDAO userDAO;
+    private final UserRoleDAO userRoleDAO;
 
     public RegistrationService() {
         this.registrationDAO = new RegistrationDAO();
@@ -63,12 +64,6 @@ public class RegistrationService {
 
     public void delete(String username) {
         this.registrationDAO.delete(username);
-    }
-
-    public void approve(String registrationId) {
-        Registration registration = registrationDAO.findById(registrationId);
-        userDAO.createFromRegistration(registration);
-        registrationDAO.delete(registrationId);
     }
 
     private void validateRequest(RegistrationRequest req) throws InvalidUserFieldsException {

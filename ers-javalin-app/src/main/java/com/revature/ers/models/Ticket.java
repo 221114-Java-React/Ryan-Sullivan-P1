@@ -13,8 +13,11 @@ public class Ticket {
     String authorId;
     String resolver;
     TicketStatus status;
-    String typeId;
+    String type;
     SerialBlob receipt;
+
+    public Ticket() {
+    }
 
     public Ticket(String ticketId, double amount, Timestamp submitted, Timestamp resolved, String description, String paymentId, String authorId, String resolver, TicketStatus status, String typeId, SerialBlob receipt) {
         this.ticketId = ticketId;
@@ -26,7 +29,7 @@ public class Ticket {
         this.authorId = authorId;
         this.resolver = resolver;
         this.status = status;
-        this.typeId = typeId;
+        this.type = typeId;
         this.receipt = receipt;
     }
 
@@ -115,12 +118,12 @@ public class Ticket {
         this.status = status;
     }
 
-    public String getTypeId() {
-        return typeId;
+    public String getType() {
+        return type;
     }
 
-    public void setTypeId(String typeId) {
-        this.typeId = typeId;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public SerialBlob getReceipt() {

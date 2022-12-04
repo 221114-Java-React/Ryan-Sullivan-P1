@@ -1,8 +1,18 @@
 package com.revature.ers.data_transfer_objects.requests;
 
-public class TicketNew {
+public class SubmitTicketRequest {
     double amount;
     String description;
+
+    String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public double getAmount() {
         return amount;

@@ -85,30 +85,4 @@ public class UserDAO {
         }
         return true;
     }
-
-    public List<User> findAll() {
-        List<User> userList = new ArrayList<>();
-
-        try (Connection connection = ConnectionFactory.getInstance().getConnection()) {
-            String query = "SELECT * from users";
-            PreparedStatement ps = connection.prepareStatement(query);
-            ResultSet resultSet = ps.executeQuery();
-            if (resultSet.next()) {
-                String userId = resultSet.getString("user_id");
-                String username = resultSet.getString("username");
-                String email = resultSet.getString("email");
-                String password = resultSet.getString("password");
-                String givenName = resultSet.getString("given_name");
-                String surname = resultSet.getString("surname");
-                boolean isActive = resultSet.getBoolean("is_active");
-                String roleId = resultSet.getString("role_id");
-                User user = new User(userId, username, email, password, givenName, surname, isActive, roleId);
-                userList.add(user);
-            }
-        } catch (SQLException e) {
-            logger.info(e.getMessage());
-        }
-
-        return userList;
-    }
 }

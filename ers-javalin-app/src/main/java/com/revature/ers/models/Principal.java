@@ -1,8 +1,8 @@
 package com.revature.ers.models;
 
 public class Principal {
-    private String id;
-    private RoleEnum role;
+    private final String id;
+    private final RoleEnum role;
 
     public Principal(String id, RoleEnum role) {
         this.id = id;

@@ -49,21 +49,6 @@ public class RegistrationDAO {
         return list;
     }
 
-    public Registration findById(String requestId) {
-        Registration registration = null;
-        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM registrations WHERE request_id = ?");
-            ps.setString(1, requestId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                registration = populateFromResult(rs);
-            }
-        } catch (SQLException e) {
-            logger.info(e.getMessage());
-        }
-        return registration;
-    }
-
     public Registration findByUsername(String username) {
         Registration registration = null;
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {

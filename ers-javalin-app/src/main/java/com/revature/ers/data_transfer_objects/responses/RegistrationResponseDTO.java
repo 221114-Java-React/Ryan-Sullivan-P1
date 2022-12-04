@@ -1,20 +1,11 @@
 package com.revature.ers.data_transfer_objects.responses;
 
 public class RegistrationResponseDTO {
-    String requestId;
-    String username;
-    String email;
-    String givenName;
-    String surname;
-    String roleId;
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
-    }
+    private String username;
+    private String email;
+    private String givenName;
+    private String surname;
+    private String roleId;
 
     public String getUsername() {
         return username;

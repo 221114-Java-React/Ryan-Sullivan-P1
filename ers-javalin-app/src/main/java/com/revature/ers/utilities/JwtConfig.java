@@ -17,9 +17,9 @@ public class JwtConfig {
     private static final SignatureAlgorithm sigAlg = SignatureAlgorithm.HS256;
      // 60 milliseconds times 60 minutes * 1000 = 1 hour
     private final Key signingKey;
-    private final Properties properties = new Properties();
 
     public JwtConfig() {
+        Properties properties = new Properties();
         try {
             properties.load(new FileReader("resources/db.properties"));
         } catch (IOException e) {
