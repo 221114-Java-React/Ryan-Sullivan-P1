@@ -22,6 +22,8 @@ The application was developed in Java with the Javalin web framework. The applic
   - Framework for unit testing
 - [Mockito](https://site.mockito.org/)
   - Mocking framework
+- [Maven](https://maven.apache.org/)
+  - Dependency management 
 
 **Persistence Tier**
 - [Docker](https://docs.docker.com/)
