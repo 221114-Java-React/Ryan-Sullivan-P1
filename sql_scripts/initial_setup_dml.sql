@@ -1,33 +1,34 @@
-insert into ers.users (user_id,
-						username,
-						email,
-						password,
-						given_name,
-						surname,
-						user_role, is_active)
-values
-	('75508d95-8919-444e-bd5e-56537b61ec88', 'admin', 'admin@email.com', 'admin', 'admin', 'admin', 'ADMIN', true),
-	('75508d95-8919-444e-bd5e-56537b61ec89', 'Ryan', 'ryan@email.com', '12345678', 'Ryan', 'Sullivan', 'MANAGER', true);
 
-insert into ers.users(user_id,
-						username,
-						email,
-						password,
-						given_name,
-						surname,
-						is_active)
-values
-	('75508d95-8919-444e-bd5e-56537b61ec80', 'bob', 'bob@email.com', 'asdflkjasdf', 'bob', 'burger', true);
+insert into ers.user_roles (api_name, label_name)
+values 
+('ADMIN', 'Administrator'),
+('MANAGER', 'Finance Manager'),
+('EMPLOYEE', 'Employee');
 
-insert into ers.ticket_types (type_id, type_text)
-values
-	('1', 'LODGING'),
-	('2', 'TRAVEL'),
-	('3', 'FOOD'),
-	('4', 'OTHER');
 	
-insert into ers.ticket_statuses (status_id, status)
+insert into ers.users (user_id, username, email, password_hash, given_name, surname, role_id, is_active)
 values
-	('1', 'PENDING'),
-	('2', 'APPROVED'),
-	('3', 'DENIED');
+('75508d95-8919-444e-bd5e-56537b61ec88',
+'admin',
+'admin@email.com',
+'84977e16949f28fad8bfd56df8689fd085d9da21580f2bc6c867e2d1720777cc',
+'Ryan',
+'Sullivan',
+'ADMIN',
+true),
+
+('75508d95-8919-444e-bd5e-56537b61ec89',
+'jdoe',
+'jdoe@email.com',
+'84977e16949f28fad8bfd56df8689fd085d9da21580f2bc6c867e2d1720777cc',
+'Jane',
+'Doe',
+'MANAGER', 
+true); -- password for both is admin123
+
+insert into ers.ticket_types (api_name, label_name)
+values
+('LODGING', 'Lodging'),
+('TRAVEL', 'Travel'),
+('FOOD', 'Food'),
+('OTHER', 'Other');

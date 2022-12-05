@@ -2,31 +2,43 @@ DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS tickets CASCADE;
 DROP TABLE IF EXISTS ticket_statuses CASCADE;
 DROP TABLE IF EXISTS ticket_types CASCADE;
-DROP TABLE IF EXISTS user_role cascade;
+drop table if exists registrations cascade;
+drop table if exists user_roles cascade;
+drop type if exists ticket_status cascade;
 
 
 
-CREATE TYPE user_role AS ENUM ('ADMIN', 'MANAGER', 'EMPLOYEE');
+create table user_roles (
+	api_name varchar primary key,
+	label_name varchar
+);
 
 CREATE TABLE users (
 	user_id VARCHAR PRIMARY KEY,
 	username VARCHAR unique not null,
 	email VARCHAR UNIQUE NOT NULL,
-	password VARCHAR NOT NULL,
+	password_hash varchar NOT NULL,
 	given_name VARCHAR NOT NULL,
 	surname VARCHAR NOT NULL,
-	is_active BOOLEAN DEFAULT false,
-	user_role user_role DEFAULT 'EMPLOYEE'
+	is_active BOOLEAN default false,
+	role_id varchar references user_roles(api_name) not null
 );
 
-CREATE TABLE ticket_statuses (
-	status_id VARCHAR PRIMARY KEY,
-	status VARCHAR UNIQUE
+create table registrations (
+	request_id VARCHAR PRIMARY KEY,
+	username VARCHAR unique not null,
+	email VARCHAR UNIQUE NOT NULL,
+	password_hash varchar NOT NULL,
+	given_name VARCHAR NOT NULL,
+	surname VARCHAR NOT NULL,
+	role_id varchar references user_roles(api_name) not null
 );
+
+CREATE TYPE ticket_status AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 
 CREATE TABLE ticket_types (
-	type_id VARCHAR PRIMARY KEY,
-	type_text VARCHAR UNIQUE
+	api_name varchar primary key,
+	label_name varchar not null
 );
 
 CREATE TABLE tickets (
@@ -39,7 +51,6 @@ CREATE TABLE tickets (
 	payment_id VARCHAR,
 	author_id VARCHAR REFERENCES users(user_id) NOT NULL,
 	resolver_id VARCHAR REFERENCES users(user_id),
-	status_id VARCHAR REFERENCES ticket_statuses(status_id),
-	type_id VARCHAR REFERENCES ticket_types(type_id)
+	status ticket_status default 'PENDING' not NULL,
+	ticket_type VARCHAR REFERENCES ticket_types(api_name) not null
 );
-
