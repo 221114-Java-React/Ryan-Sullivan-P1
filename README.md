@@ -38,23 +38,26 @@ The application was developed in Java with the Javalin web framework. The applic
 - Add properties for `url`, `username`, `password`, and `salt`
 - The applications entry point is `MainDriver::main`. This will serve the application via Jetty on port `8080`.
 
+
+
+## System
+
+- Javalin Application that exposes a RESTFUL api for interacting with the system from a client (such as a single page application frontend). This connects to a containerized PostgreSQL relational database;
+
+- The API is a level 2 RESTFUL api (Richardson Maturity mdel). It is stateless and resources are fetched and modified via multiple URIs and verbs.
+
+<details><summary>System Diagram</summary>
+
+![system](./images/system.png)
+
+</details>
+
+
 ## Tables
 
 <details><summary>Entity Relationship Diagram</summary>
 
 ![schema](./images/erd.png)
-
-</details>
-
-## System
-
-Javalin Application that exposes a Level 2 (Richardson maturity model) Restful API with multiple URI resources and verbs. This connects to a containerized PostgreSQL relational database;
-
-The API is stateless and resources are fetched and modified via multiple uri and verbs.
-
-<details><summary>System Diagram</summary>
-
-![system](./images/system.png)
 
 </details>
 
