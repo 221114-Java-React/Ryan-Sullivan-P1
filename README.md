@@ -93,7 +93,7 @@ The application was developed in Java with the Javalin web framework. The applic
 - [x] An authenticated finance manager can view a list of all pending reimbursement requests
   - `GET /tickets/pending` 
 - [x] An authenticated finance manager can view a history of requests that they have approved/denied
-  - `GET /tickets/resolved`
+  - `GET /tickets/resolved-by-me`
 - [x] An authenticated finance manager can approve/deny reimbursement requests
   - `POST /tickets/approve/{ticket_id}`
   - `POST /tickets/reject/{ticket_id}`
