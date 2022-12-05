@@ -48,6 +48,10 @@ The application was developed in Java with the Javalin web framework. The applic
 
 ## System
 
+Javalin Application that exposes a Level 2 (Richardson maturity model) Restful API with multiple URI resources and verbs. This connects to a containerized PostgreSQL relational database;
+
+The API is stateless and resources are fetched and modified via multiple uri and verbs.
+
 <details><summary>System Diagram</summary>
 
 ![system](./images/system.png)
@@ -120,7 +124,6 @@ The application was developed in Java with the Javalin web framework. The applic
 
 ## API
 
-Level 2 (Richardson maturity model) Restful API with multiple URI resources and verbs
 
 <hr/>
 
