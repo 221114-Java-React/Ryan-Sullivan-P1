@@ -38,13 +38,21 @@ The application was developed in Java with the Javalin web framework. The applic
 - Add properties for `url`, `username`, `password`, and `salt`
 - The applications entry point is `MainDriver::main`. This will serve the application via Jetty on port `8080`.
 
-## Schema
+## Tables
+
+<details><summary>Entity Relationship Diagram</summary>
 
 ![schema](./images/erd.png)
 
+</details>
+
 ## System
 
+<details><summary>System Diagram</summary>
+
 ![system](./images/system.png)
+
+</details>
 
 ## Project Requirements
 ### Functional Requirement Goals
@@ -82,9 +90,9 @@ The application was developed in Java with the Javalin web framework. The applic
 
 - [x] Basic validation is enforced to ensure that invalid/improper data is not persisted
 - [x] User passwords will be encrypted by the system before persisting them to the data source
-- [ ] Users are unable to recall reimbursement requests once they have been processed (only pending allowed)
+- [x] Users are unable to recall reimbursement requests once they have been processed (only pending allowed)
 - [x] Sensitive endpoints are protected from unauthenticated and unauthorized requesters using JWTs
-- [ ] Errors and exceptions are handled properly and their details are obfuscated from the user
+- [x] Errors and exceptions are handled properly and their details are obfuscated from the user
 - [x] The system conforms to RESTful architecture constraints
 - [ ] The system's is tested with at least 80% line coverage in all service and utility classes
 - [x] The system keeps detailed logs on info, error, and fatal events that occur
@@ -95,7 +103,7 @@ The application was developed in Java with the Javalin web framework. The applic
 - [ ] Automate builds using Jenkins
 ## Milestones
 
-- [ ] Project requirements delivered
+- [x] Project requirements delivered
 - [x] Remote repository is created and is being kept up to date
 - [x] Core model classes are created
 - [x] Registration/Authentication/User operations in progress
@@ -105,11 +113,10 @@ The application was developed in Java with the Javalin web framework. The applic
 - [x] Registration/Authentication/User operations complete
 - [x] Reimbursement operations in progress
 - [x] Basic persistence layer operations in progress
-- [ ] Testing of business logic is in progress
+- [x] Testing of business logic is in progress
 - [x] Registration/Authentication web endpoints are accessible and functional
 - [x] Reimbursement web endpoints are accessible and functional
 - [x] User passwords are encrypted when persisted to the DB
-- [ ] Testing of business logic is in progress
 
 ## API
 <hr/>
