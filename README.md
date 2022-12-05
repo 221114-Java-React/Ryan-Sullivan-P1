@@ -119,6 +119,9 @@ The application was developed in Java with the Javalin web framework. The applic
 - [x] User passwords are encrypted when persisted to the DB
 
 ## API
+
+Level 2 (Richardson maturity model) Restful API with multiple URI resources and verbs
+
 <hr/>
 
 <details>
