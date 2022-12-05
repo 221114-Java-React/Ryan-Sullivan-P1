@@ -21,6 +21,12 @@ public class UserService {
         this.registrationDAO = new RegistrationDAO();
     }
 
+    // this constructor used for testing
+    public UserService(UserDAO userDAO, RegistrationDAO registrationDAO) {
+        this.userDAO = userDAO;
+        this.registrationDAO = registrationDAO;
+    }
+
     public Principal login(LoginRequest req) throws InvalidCredentialsException {
         User validUser = userDAO.findByUsernameAndPasswordHash(req.getUsername(), UtilityMethods.hashPasswordWithSalt(req.getPassword()));
         if (validUser == null) throw new InvalidCredentialsException("invalid username or password");

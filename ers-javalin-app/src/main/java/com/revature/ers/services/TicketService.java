@@ -20,6 +20,10 @@ public class TicketService {
         this.ticketDAO = new TicketDAO();
     }
 
+    public TicketService(TicketDAO ticketDAO) {
+        this.ticketDAO = ticketDAO;
+    }
+
     public void createTicket(SubmitTicketRequest req, Principal principal) throws InvalidTicketRequestException {
         if (req.getAmount() <= 0) throw new InvalidTicketRequestException("amount must be positive");
         if (req.getDescription() == null || req.getDescription().isEmpty()) {
@@ -63,8 +67,6 @@ public class TicketService {
 
     public void deleteFor(String userId, String ticketId) throws InvalidTicketRequestException {
         Ticket ticket = ticketDAO.findById(ticketId);
-        System.out.println(ticket.getAuthorId());
-        System.out.println(userId);
         if (!ticket.getAuthorId().equals(userId)) throw new InvalidTicketRequestException("not your ticket");
         if (ticket.getStatus() != TicketStatus.PENDING) throw new InvalidTicketRequestException("ticket already resolved");
         ticketDAO.delete(ticketId);

@@ -144,8 +144,7 @@ body
   - [x] `POST /login` 
 - [ ] An authenticated employee can view and manage their pending reimbursement requests
   - [x] `GET /tickets/mine/filtered` (view)
-  - [ ] `PUT /tickets/mine/{id}` (and manage)
-  - [ ] `DELETE /tickets/mine/{id}` (and manage)
+  - [x] `DELETE /tickets/mine/{id}` (and manage)
 - [x] An authenticated employee can view their reimbursement request history (sortable and filterable)
   - [x] `GET /tickets/mine`
   - [x] `GET /tickets/mine/filtered` 

@@ -2,7 +2,6 @@ package com.revature.ers.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-import com.revature.ers.data_access_objects.TicketDAO;
 import io.javalin.http.Context;
 import com.revature.ers.data_transfer_objects.requests.SubmitTicketRequest;
 import com.revature.ers.models.Principal;
