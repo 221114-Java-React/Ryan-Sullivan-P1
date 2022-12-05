@@ -74,6 +74,7 @@ public class TicketService {
 
     public List<Ticket> getFilteredTickets(String userId,  Map<String, List<String>> params) {
         List<Ticket> fullList = ticketDAO.getAllForUser(userId);
+        System.out.println(fullList.size());
         return filterList(fullList, params);
     }
 
@@ -81,7 +82,6 @@ public class TicketService {
         List<String> types = params.get("type");
         List<String> status = params.get("status");
         List<Ticket> filtered = new LinkedList<>();
-
         for (Ticket ticket : list) {
             if (types != null && types.size() > 0) {
                 if (!types.contains(ticket.getType())) {

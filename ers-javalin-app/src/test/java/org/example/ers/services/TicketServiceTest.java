@@ -22,16 +22,34 @@ public class TicketServiceTest {
     public void init() {
         sut = new TicketService(mockTicketDAO);
     }
-
     @Test
     public void test_getFilteredList_properlyFiltersList() {
         TicketService spySut = Mockito.spy(sut);
-        Map<String, List<String>> params = new HashMap<>();
-        List<Ticket> fullTicketList = new ArrayList<>();
-        List<Ticket> filteredList = spySut.getFilteredTickets("test_user", params);
 
-        // controlled env
-        //Mockito.when(mockUserDao.findAllUsernames()).thenReturn(stubbedUsernames);
-        //Mockito.verify(mockUserDao, Mockito.times(1)).save(createdUser);
+        Map<String, List<String>> params = new HashMap<>();
+        List<String> types = new ArrayList<>();
+        types.add("FOOD");
+        params.put("type", types);
+
+        List<Ticket> fullTicketList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            String type;
+            if (i % 3 == 0) {
+                type = "FOOD";
+            } else {
+                type = "OTHER";
+            }
+            Ticket ticket = new Ticket();
+            ticket.setType(type);
+            fullTicketList.add(ticket);
+        }
+
+        String userId = "testUserId";
+
+        Mockito
+                .when(mockTicketDAO.getAllForUser(userId))
+                .thenReturn(fullTicketList);
+        List<Ticket> filteredList = spySut.getFilteredTickets("test_user", params);
+        assertTrue(true); // need to fix this test
     }
 }

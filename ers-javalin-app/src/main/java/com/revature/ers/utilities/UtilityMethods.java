@@ -18,7 +18,7 @@ public class UtilityMethods {
     }
 
     public static String generateRandomPw() {
-        return RandomStringUtils.random(8, true, true);
+        return RandomStringUtils.random(10, true, true) + "a9";
     }
 
     public static boolean validUsername(String username) {
