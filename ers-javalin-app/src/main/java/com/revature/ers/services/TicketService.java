@@ -56,4 +56,30 @@ public class TicketService {
     public List<Ticket> getAllForUser(String userId) {
         return ticketDAO.getAllForUser(userId);
     }
+
+    public List<Ticket> getFilteredTickets(String userId,  Map<String, List<String>> params) {
+        List<Ticket> fullList = ticketDAO.getAllForUser(userId);
+        return filterList(fullList, params);
+    }
+
+    private List<Ticket> filterList(List<Ticket> list, Map<String, List<String>> params) {
+        List<String> types = params.get("type");
+        List<String> status = params.get("status");
+        List<Ticket> filtered = new LinkedList<>();
+
+        for (Ticket ticket : list) {
+            if (types != null && types.size() > 0) {
+                if (types.contains(ticket.getType())) {
+                    filtered.add(ticket);
+                }
+            }
+            if (status != null && status.size() > 0) {
+                if (status.contains(String.valueOf(ticket.getStatus()))) {
+                    filtered.add(ticket);
+                }
+            }
+        }
+        return filtered;
+    }
+
 }

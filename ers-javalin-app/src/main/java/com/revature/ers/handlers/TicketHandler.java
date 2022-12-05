@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class TicketHandler {
     private final static Logger logger = LoggerFactory.getLogger(TicketHandler.class);
@@ -53,7 +54,10 @@ public class TicketHandler {
     }
 
     public void getMyFilteredTickets(Context ctx) {
-
+        Principal principal = ctx.attribute("principal");
+        Map<String, List<String>> paramMap = ctx.queryParamMap();
+        List<Ticket> tickets = ticketService.getFilteredTickets(principal.getId(), paramMap);
+        ctx.status(200).json(tickets);
     }
 
     public void updateMyTicket(Context ctx) {

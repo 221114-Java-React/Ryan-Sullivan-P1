@@ -1,14 +1,14 @@
-# Employee Reimbursement System
+# Employee Reimbursement System Backend
 
 ## Description
 
 <hr/>
 
-The employee reimbursement system allows employees to submit tickets for business expenses. These tickets can then be approved or rejected by financial managers registered with the system. This project is the backend for such a system.
+The employee reimbursement system allows employees to submit tickets for business expenses. These tickets can then be approved or rejected by financial managers registered with the system. This project is the backend for the system.
 
 The application exposes a RESTFUL API that allows employees, financial managers, and administrators to interact with the system via http requests and responses.
 
-The application is developed in Java with the Javalin web framework. The application connects to a PostgreSQL database via the Java Database Connection API. This database primarily stores users and tickets along with a few other tables that aid in the function of the application. 
+The application was developed in Java with the Javalin web framework. The application connects to a PostgreSQL database via the Java Database Connection API. This database primarily stores users and tickets along with a few other tables that aid in the function of the application. 
 
 ## Primary Tech Stack
 
@@ -39,8 +39,8 @@ The application is developed in Java with the Javalin web framework. The applica
 
 - Start a postgres database you want to use for testing and run `create_tables_ddl.sql` then `initial_setup_dml.sql` in `scripts` folder
 - Create a `resources` directory and a `db.properties` file under `ers-javalin-app`.
-- Add properties for `url`, `username`, `password`, and `password`
-- The applications entry point is `MainDriver::main`
+- Add properties for `url`, `username`, `password`, and `salt`
+- The applications entry point is `MainDriver::main`. This will serve the application via Jetty on port `8080`.
 
 ## API
 <hr/>
@@ -143,17 +143,17 @@ body
 - [x] A registered employee can authenticate with the system by providing valid credentials
   - [x] `POST /login` 
 - [ ] An authenticated employee can view and manage their pending reimbursement requests
-  - [ ] `GET /tickets/mine/pending` (view)
+  - [x] `GET /tickets/mine/filtered` (view)
   - [ ] `PUT /tickets/mine/{id}` (and manage)
   - [ ] `DELETE /tickets/mine/{id}` (and manage)
-- [ ] An authenticated employee can view their reimbursement request history (sortable and filterable)
+- [x] An authenticated employee can view their reimbursement request history (sortable and filterable)
   - [x] `GET /tickets/mine`
-  - [ ] `GET /tickets/mine/filtered` 
+  - [x] `GET /tickets/mine/filtered` 
 - [x] An authenticated employee can submit a new reimbursement request
   - `POST /tickets`
 - [ ] An authenticated finance manager can view a list of all pending reimbursement requests
   - `GET /tickets/pending` 
-- [x] An authenticated finance manager can view a history of requests that they have approved/denied
+- [ ] An authenticated finance manager can view a history of requests that they have approved/denied
   - `GET /tickets/approved` 
   - `GET /tickets/rejected`
 - [x] An authenticated finance manager can approve/deny reimbursement requests
