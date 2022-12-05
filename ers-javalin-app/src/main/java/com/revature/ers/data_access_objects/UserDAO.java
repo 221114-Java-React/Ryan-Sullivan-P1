@@ -14,6 +14,41 @@ import java.sql.*;
 public class UserDAO {
 
     private final static Logger logger = LoggerFactory.getLogger(UserDAO.class);
+
+
+    private User populateFromResult(ResultSet rs) throws SQLException {
+        User user = new User();
+
+        user.setUserId(rs.getString("user_id"));
+        user.setUsername(rs.getString("username"));
+        user.setEmail(rs.getString("email"));
+        user.setPasswordHash(rs.getString("password_hash"));
+        user.setUserId(rs.getString("user_id"));
+        user.setGivenName(rs.getString("given_name"));
+        user.setSurname(rs.getString("surname"));
+        user.setActive(rs.getBoolean("is_active"));
+        user.setRoleId(rs.getString("role_id"));
+
+        return user;
+    }
+
+
+    public User findById(String userId) {
+        User user = null;
+
+        try (Connection connection = ConnectionFactory.getInstance().getConnection()){
+            String query = "SELECT * from users WHERE user_id = ?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, userId);
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                user = populateFromResult(resultSet);
+            }
+        } catch (SQLException e) {
+            logger.info(e.getMessage());
+        }
+        return user;
+    }
     public void createFromRegistration(Registration registration) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
             String dml = "INSERT INTO users (user_id, username, email, password_hash, given_name, surname, role_id, is_active)";

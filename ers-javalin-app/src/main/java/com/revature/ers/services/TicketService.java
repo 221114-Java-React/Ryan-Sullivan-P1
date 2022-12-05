@@ -57,6 +57,19 @@ public class TicketService {
         return ticketDAO.getAllForUser(userId);
     }
 
+    public List<Ticket> getResolvedBy(String userId) {
+        return ticketDAO.getResolvedBy(userId);
+    }
+
+    public void deleteFor(String userId, String ticketId) throws InvalidTicketRequestException {
+        Ticket ticket = ticketDAO.findById(ticketId);
+        System.out.println(ticket.getAuthorId());
+        System.out.println(userId);
+        if (!ticket.getAuthorId().equals(userId)) throw new InvalidTicketRequestException("not your ticket");
+        if (ticket.getStatus() != TicketStatus.PENDING) throw new InvalidTicketRequestException("ticket already resolved");
+        ticketDAO.delete(ticketId);
+    }
+
     public List<Ticket> getFilteredTickets(String userId,  Map<String, List<String>> params) {
         List<Ticket> fullList = ticketDAO.getAllForUser(userId);
         return filterList(fullList, params);
@@ -69,15 +82,16 @@ public class TicketService {
 
         for (Ticket ticket : list) {
             if (types != null && types.size() > 0) {
-                if (types.contains(ticket.getType())) {
-                    filtered.add(ticket);
+                if (!types.contains(ticket.getType())) {
+                    continue;
                 }
             }
             if (status != null && status.size() > 0) {
-                if (status.contains(String.valueOf(ticket.getStatus()))) {
-                    filtered.add(ticket);
+                if (!status.contains(String.valueOf(ticket.getStatus()))) {
+                    continue;
                 }
             }
+            filtered.add(ticket);
         }
         return filtered;
     }

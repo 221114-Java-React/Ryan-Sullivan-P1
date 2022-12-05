@@ -24,6 +24,7 @@ public class UserService {
     public Principal login(LoginRequest req) throws InvalidCredentialsException {
         User validUser = userDAO.findByUsernameAndPasswordHash(req.getUsername(), UtilityMethods.hashPasswordWithSalt(req.getPassword()));
         if (validUser == null) throw new InvalidCredentialsException("invalid username or password");
+        if (!validUser.isActive()) throw new InvalidCredentialsException("inactive user");
         String roleName = validUser.getRoleId();
         return new Principal(validUser.getUserId(), RoleEnum.valueOf(roleName));
     }

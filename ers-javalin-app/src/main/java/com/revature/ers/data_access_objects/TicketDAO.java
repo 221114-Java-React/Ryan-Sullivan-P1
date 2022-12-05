@@ -37,13 +37,12 @@ public class TicketDAO {
     public Ticket findById(String ticketId) {
         Ticket ticket = null;
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
-            String dql = "SELECT ticket_id, status FROM tickets WHERE ticket_id = ?";
+            String dql = "SELECT * FROM tickets WHERE ticket_id = ?";
             PreparedStatement ps = con.prepareStatement(dql);
             ps.setString(1, ticketId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                TicketStatus status = TicketStatus.valueOf(rs.getString("status"));
-                ticket = new Ticket(ticketId, status);
+                ticket = populateFromResult(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,6 +50,19 @@ public class TicketDAO {
         }
         return ticket;
     }
+
+
+    public void delete(String ticketId) {
+        System.out.println(ticketId);
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("DELETE FROM tickets WHERE ticket_id = ?");
+            ps.setString(1, ticketId);
+            ps.execute();
+        } catch (SQLException e) {
+            logger.info("sql exception deleting ticket");
+        }
+    }
+
 
     public void resolve(Ticket ticket) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
@@ -70,7 +82,7 @@ public class TicketDAO {
 
 
     public List<Ticket> getByStatus(TicketStatus status) {
-        List<Ticket> tickets = new LinkedList<Ticket>();
+        List<Ticket> tickets = new LinkedList<>();
 
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
             String dql = "SELECT * FROM tickets WHERE status = ?::ticket_status";
@@ -78,14 +90,10 @@ public class TicketDAO {
             ps.setString(1, String.valueOf(status));
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                tickets.add(new Ticket(rs.getString("ticket_id"),
-                        rs.getDouble("amount"),
-                        rs.getTimestamp("submitted"),
-                        rs.getString("description"),
-                        rs.getString("author_id")));
+                tickets.add(populateFromResult(rs));
             }
+            logger.info("fetched all pending statuses");
         } catch (SQLException e) {
-            e.printStackTrace();
             logger.info("sql exception with TicketDAO.findById()");
         }
         return tickets;
@@ -96,6 +104,24 @@ public class TicketDAO {
 
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
             String dql = "SELECT * FROM tickets WHERE author_id = ?";
+            PreparedStatement ps = con.prepareStatement(dql);
+            ps.setString(1, userId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                tickets.add(populateFromResult(rs));
+            }
+        } catch (SQLException e) {
+            logger.info(e.getMessage());
+        }
+
+        return tickets;
+    }
+
+    public List<Ticket> getResolvedBy(String userId) {
+        List<Ticket> tickets = new ArrayList<Ticket>();
+
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            String dql = "SELECT * FROM tickets WHERE resolver_id = ?";
             PreparedStatement ps = con.prepareStatement(dql);
             ps.setString(1, userId);
             ResultSet rs = ps.executeQuery();

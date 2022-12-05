@@ -64,15 +64,12 @@ public class Router {
                 // for all employees
                 post(ticketHandler::submit, RoleEnum.EMPLOYEE, RoleEnum.MANAGER, RoleEnum.ADMIN);
                 get("mine", ticketHandler::getAllMyTickets, RoleEnum.EMPLOYEE, RoleEnum.MANAGER, RoleEnum.ADMIN);
-                get("mine/pending", ticketHandler::getMyPendingTickets, RoleEnum.EMPLOYEE, RoleEnum.MANAGER, RoleEnum.ADMIN);
                 get("mine/filtered", ticketHandler::getMyFilteredTickets, RoleEnum.EMPLOYEE, RoleEnum.MANAGER, RoleEnum.ADMIN);
-                put("mine/{id}", ticketHandler::updateMyTicket, RoleEnum.EMPLOYEE, RoleEnum.MANAGER, RoleEnum.ADMIN);
                 delete("mine/{id}", ticketHandler::deleteMyTicket, RoleEnum.EMPLOYEE, RoleEnum.MANAGER, RoleEnum.ADMIN);
 
                 // only for financial managers
-                get("status/pending", ticketHandler::getAllPending, RoleEnum.MANAGER);
-                get("status/approved-by-me", ticketHandler::getByStatusForManager, RoleEnum.MANAGER);
-                get("status/rejected-by-me", ticketHandler::getByStatusForManager, RoleEnum.MANAGER);
+                get("pending", ticketHandler::getAllPending, RoleEnum.MANAGER);
+                get("resolved-by-me", ticketHandler::getResolvedBy, RoleEnum.MANAGER);
                 put("approve/{id}", (ctx) -> ticketHandler.resolve(ctx, TicketStatus.APPROVED), RoleEnum.MANAGER);
                 put("reject/{id}", (ctx) -> ticketHandler.resolve(ctx, TicketStatus.REJECTED), RoleEnum.MANAGER);
             });

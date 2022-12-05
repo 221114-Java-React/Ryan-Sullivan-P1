@@ -49,10 +49,6 @@ public class TicketHandler {
         ctx.json(tickets);
     }
 
-    public void getMyPendingTickets(Context ctx) {
-
-    }
-
     public void getMyFilteredTickets(Context ctx) {
         Principal principal = ctx.attribute("principal");
         Map<String, List<String>> paramMap = ctx.queryParamMap();
@@ -60,21 +56,25 @@ public class TicketHandler {
         ctx.status(200).json(tickets);
     }
 
-    public void updateMyTicket(Context ctx) {
-
-    }
-
     public void deleteMyTicket(Context ctx) {
-
+        Principal principal = ctx.attribute("principal");
+        String ticketId = ctx.pathParam("id");
+        try {
+            ticketService.deleteFor(principal.getId(), ticketId);
+            ctx.status(200);
+        } catch (InvalidTicketRequestException e) {
+            ctx.status(400).result(e.getMessage());
+        }
     }
 
     public void getAllPending(Context ctx) {
-
+        List<Ticket> ticketList = ticketService.getByStatus(TicketStatus.PENDING);
+        ctx.json(ticketList);
     }
 
-    public void getByStatusForManager(Context ctx) {
-        TicketStatus status = TicketStatus.valueOf(ctx.pathParam("status").toUpperCase());
-        List<Ticket> ticketList = ticketService.getByStatus(status);
+    public void getResolvedBy(Context ctx) {
+        Principal principal = ctx.attribute("principal");
+        List<Ticket> ticketList = ticketService.getResolvedBy(principal.getId());
         ctx.json(ticketList);
     }
 

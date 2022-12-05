@@ -1,5 +1,7 @@
 package com.revature.ers.utilities;
 
+import com.revature.ers.data_access_objects.UserDAO;
+import com.revature.ers.models.User;
 import io.javalin.core.security.RouteRole;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -26,10 +28,17 @@ public class AccessConfiguration {
                 context.status(400).result(e.getMessage());
                 return;
             }
-
         }
 
         if (routeRoles.isEmpty() || (principal != null && routeRoles.contains(principal.getRole()))) {
+            if (principal != null) {
+                UserDAO userDAO = new UserDAO();
+                User user = userDAO.findById(principal.getId());
+                if (user == null || !user.isActive()) {
+                    context.status(401).result("unauthorized");
+                    return;
+                }
+            }
             handler.handle(context);
         } else {
             context.status(401).result("Unauthorized");

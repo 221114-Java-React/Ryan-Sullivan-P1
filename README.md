@@ -151,11 +151,10 @@ body
   - [x] `GET /tickets/mine/filtered` 
 - [x] An authenticated employee can submit a new reimbursement request
   - `POST /tickets`
-- [ ] An authenticated finance manager can view a list of all pending reimbursement requests
+- [x] An authenticated finance manager can view a list of all pending reimbursement requests
   - `GET /tickets/pending` 
-- [ ] An authenticated finance manager can view a history of requests that they have approved/denied
-  - `GET /tickets/approved` 
-  - `GET /tickets/rejected`
+- [x] An authenticated finance manager can view a history of requests that they have approved/denied
+  - `GET /tickets/resolved`
 - [x] An authenticated finance manager can approve/deny reimbursement requests
   - `POST /tickets/approve/{ticket_id}`
   - `POST /tickets/reject/{ticket_id}`
