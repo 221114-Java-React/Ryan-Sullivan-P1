@@ -2,7 +2,6 @@
 
 ## Description
 
-<hr/>
 
 The employee reimbursement system allows employees to submit tickets for business expenses. These tickets can then be approved or rejected by financial managers registered with the system. This project is the backend for the system.
 
@@ -11,8 +10,6 @@ The application exposes a RESTFUL API that allows employees, financial managers,
 The application was developed in Java with the Javalin web framework. The application connects to a PostgreSQL database via the Java Database Connection API. This database primarily stores users and tickets along with a few other tables that aid in the function of the application. 
 
 ## Primary Tech Stack
-
-<hr/>
 
 **Application Tier**
 - [Java 8](https://www.oracle.com/java/technologies/java8.html)
@@ -35,12 +32,84 @@ The application was developed in Java with the Javalin web framework. The applic
 
 ## Development setup
 
-<hr/>
 
 - Start a postgres database you want to use for testing and run `create_tables_ddl.sql` then `initial_setup_dml.sql` in `scripts` folder
 - Create a `resources` directory and a `db.properties` file under `ers-javalin-app`.
 - Add properties for `url`, `username`, `password`, and `salt`
 - The applications entry point is `MainDriver::main`. This will serve the application via Jetty on port `8080`.
+
+## Schema
+
+![schema](./images/erd.png)
+
+## System
+
+![system](./images/system.png)
+
+## Project Requirements
+### Functional Requirement Goals
+
+- [x] An new employee or new finance manager can request registration with the system
+  - [x] `POST /registrations` 
+- [x] An admin user can approve or deny new registration requests and the system will register the user's information for payment processing
+  - [x] `GET /registrations`, (see registrations in system)
+  - [x] `POST /users/{username}` (approve)
+  - [x] `DELETE /registrations/{username}` (deny)
+
+- [x] A registered employee can authenticate with the system by providing valid credentials
+  - [x] `POST /login` 
+- [x] An authenticated employee can view and manage their pending reimbursement requests
+  - [x] `GET /tickets/mine/filtered` (view)
+  - [x] `DELETE /tickets/mine/{id}` (and manage)
+- [x] An authenticated employee can view their reimbursement request history (sortable and filterable)
+  - [x] `GET /tickets/mine`
+  - [x] `GET /tickets/mine/filtered` 
+- [x] An authenticated employee can submit a new reimbursement request
+  - `POST /tickets`
+- [x] An authenticated finance manager can view a list of all pending reimbursement requests
+  - `GET /tickets/pending` 
+- [x] An authenticated finance manager can view a history of requests that they have approved/denied
+  - `GET /tickets/resolved`
+- [x] An authenticated finance manager can approve/deny reimbursement requests
+  - `POST /tickets/approve/{ticket_id}`
+  - `POST /tickets/reject/{ticket_id}`
+- [x] An admin user can deactivate user accounts, making them unable to log into the system
+  - `PUT /users/deactive/{username}` 
+- [x] An admin user can reset a registered user's password
+  - `PUT /users/reset/{username}` 
+
+### Non-Functional Requirements
+
+- [x] Basic validation is enforced to ensure that invalid/improper data is not persisted
+- [x] User passwords will be encrypted by the system before persisting them to the data source
+- [ ] Users are unable to recall reimbursement requests once they have been processed (only pending allowed)
+- [x] Sensitive endpoints are protected from unauthenticated and unauthorized requesters using JWTs
+- [ ] Errors and exceptions are handled properly and their details are obfuscated from the user
+- [x] The system conforms to RESTful architecture constraints
+- [ ] The system's is tested with at least 80% line coverage in all service and utility classes
+- [x] The system keeps detailed logs on info, error, and fatal events that occur
+
+### Suggested Bonus Features
+- [ ] Authenticated employees are able to upload an receipt image along with their reimbursement request
+- [ ] Run your application within a Docker container
+- [ ] Automate builds using Jenkins
+## Milestones
+
+- [ ] Project requirements delivered
+- [x] Remote repository is created and is being kept up to date
+- [x] Core model classes are created
+- [x] Registration/Authentication/User operations in progress
+- [x] Local DB instance running
+- [x] App to DB connection made
+- [x] Specified tables created with proper constraints
+- [x] Registration/Authentication/User operations complete
+- [x] Reimbursement operations in progress
+- [x] Basic persistence layer operations in progress
+- [ ] Testing of business logic is in progress
+- [x] Registration/Authentication web endpoints are accessible and functional
+- [x] Reimbursement web endpoints are accessible and functional
+- [x] User passwords are encrypted when persisted to the DB
+- [ ] Testing of business logic is in progress
 
 ## API
 <hr/>
@@ -124,73 +193,3 @@ body
  ```
 
 </details>
-
-
-## Schema
-
-## User Stories
-
-## Project Requirements
-### Functional Requirement Goals
-
-- [x] An new employee or new finance manager can request registration with the system
-  - [x] `POST /registrations` 
-- [x] An admin user can approve or deny new registration requests and the system will register the user's information for payment processing
-  - [x] `GET /registrations`, (see registrations in system)
-  - [x] `POST /users/{username}` (approve)
-  - [x] `DELETE /registrations/{username}` (deny)
-
-- [x] A registered employee can authenticate with the system by providing valid credentials
-  - [x] `POST /login` 
-- [ ] An authenticated employee can view and manage their pending reimbursement requests
-  - [x] `GET /tickets/mine/filtered` (view)
-  - [x] `DELETE /tickets/mine/{id}` (and manage)
-- [x] An authenticated employee can view their reimbursement request history (sortable and filterable)
-  - [x] `GET /tickets/mine`
-  - [x] `GET /tickets/mine/filtered` 
-- [x] An authenticated employee can submit a new reimbursement request
-  - `POST /tickets`
-- [x] An authenticated finance manager can view a list of all pending reimbursement requests
-  - `GET /tickets/pending` 
-- [x] An authenticated finance manager can view a history of requests that they have approved/denied
-  - `GET /tickets/resolved`
-- [x] An authenticated finance manager can approve/deny reimbursement requests
-  - `POST /tickets/approve/{ticket_id}`
-  - `POST /tickets/reject/{ticket_id}`
-- [x] An admin user can deactivate user accounts, making them unable to log into the system
-  - `PUT /users/deactive/{username}` 
-- [x] An admin user can reset a registered user's password
-  - `PUT /users/reset/{username}` 
-
-### Non-Functional Requirements
-
-- [ ] Basic validation is enforced to ensure that invalid/improper data is not persisted
-- [x] User passwords will be encrypted by the system before persisting them to the data source
-- [ ] Users are unable to recall reimbursement requests once they have been processed (only pending allowed)
-- [x] Sensitive endpoints are protected from unauthenticated and unauthorized requesters using JWTs
-- [ ] Errors and exceptions are handled properly and their details are obfuscated from the user
-- [x] The system conforms to RESTful architecture constraints
-- [ ] The system's is tested with at least 80% line coverage in all service and utility classes
-- [ ] The system keeps detailed logs on info, error, and fatal events that occur
-
-### Suggested Bonus Features
-- [ ] Authenticated employees are able to upload an receipt image along with their reimbursement request
-- [ ] Run your application within a Docker container
-- [ ] Automate builds using Jenkins
-## Milestones
-
-- [ ] Project requirements delivered
-- [x] Remote repository is created and is being kept up to date
-- [x] Core model classes are created
-- [x] Registration/Authentication/User operations in progress
-- [x] Local DB instance running
-- [x] App to DB connection made
-- [x] Specified tables created with proper constraints
-- [x] Registration/Authentication/User operations complete
-- [x] Reimbursement operations in progress
-- [x] Basic persistence layer operations in progress
-- [ ] Testing of business logic is in progress
-- [x] Registration/Authentication web endpoints are accessible and functional
-- [x] Reimbursement web endpoints are accessible and functional
-- [x] User passwords are encrypted when persisted to the DB
-- [ ] Testing of business logic is in progress
